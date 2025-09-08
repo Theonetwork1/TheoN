@@ -84,10 +84,10 @@ const Home = () => {
                 <ArrowRight className="ml-2 w-5 h-5" />
               </a>
               <Link
-                to="/projects"
+                to="/services"
                 className="inline-flex items-center px-8 py-4 bg-white hover:bg-gray-50 text-slate-800 font-semibold rounded-lg shadow-lg border border-gray-200 transition-all duration-300"
               >
-                {t('home.hero.secondary')}
+                View Our Services
               </Link>
             </div>
           </div>

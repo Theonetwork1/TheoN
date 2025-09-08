@@ -417,11 +417,10 @@ const Login = () => {
         <div className="text-center">
           <Link to="/" className="inline-flex items-center space-x-2 mb-6">
             <img 
-              src="/theo-network-logo.png" 
+              src="/TheoNetwork Logo (1).png" 
               alt="Theo Network Logo" 
-              className="w-12 h-12 object-contain"
+              className="w-16 h-16 object-contain"
             />
-            <span className="text-2xl font-bold text-slate-800">Theo Network</span>
           </Link>
           
           <h2 className="text-3xl font-bold text-slate-900 mb-2">

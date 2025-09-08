@@ -88,12 +88,10 @@ const About = () => {
               <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl p-8 h-96 flex items-center justify-center">
                 <div className="text-center">
                   <img 
-                    src="/TheoNetwork Logo (1).png" 
+                    src="/TheoNetwork Logo (1).png"
                     alt="Theo Network Logo" 
-                    className="w-24 h-24 object-contain mx-auto mb-4"
+                    className="w-32 h-32 object-contain mx-auto mb-4"
                   />
-                  <h3 className="text-2xl font-bold text-slate-900">Theo Network</h3>
-                  <p className="text-slate-600">Excellence in Technology</p>
                 </div>
               </div>
             </div>

@@ -13,8 +13,6 @@ const Navbar = () => {
     { path: '/', label: t('nav.home') },
     { path: '/about', label: t('nav.about') },
     { path: '/services', label: t('nav.services') },
-    { path: '/projects', label: t('nav.projects') },
-    { path: '/blog', label: t('nav.blog') },
     { path: '/contact', label: t('nav.contact') },
     { path: '/faq', label: 'FAQ' },
   ];
@@ -30,9 +28,8 @@ const Navbar = () => {
             <img 
               src="/TheoNetwork Logo (1).png" 
               alt="Theo Network Logo" 
-              className="w-10 h-10 object-contain"
+              className="w-16 h-16 object-contain"
             />
-            <span className="text-xl font-bold text-slate-800">Theo Network</span>
           </Link>
 
           {/* Desktop Navigation */}
