@@ -27,6 +27,7 @@ const Navbar = () => {
               src="/TheoNetwork Logo (1).png" 
               alt="Theo Network Logo" 
               className="w-16 h-16 object-contain"
+            />
           </Link>
 
           {/* Desktop Navigation */}
