@@ -92,6 +92,8 @@ const About = () => {
                     alt="Theo Network Logo" 
                     className="w-32 h-32 object-contain mx-auto mb-4"
                   />
+                </div>
+              </div>
             </div>
           </div>
         </div>
