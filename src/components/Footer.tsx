@@ -40,9 +40,29 @@ const Footer = () => {
             </div>
             
             <div className="mt-6">
-              <span className="text-xs text-gray-500">
-                Professional Tech Solutions
-              </span>
+              <a
+                href="/admin/blog"
+                className="text-xs text-gray-500 hover:text-orange-500 transition-colors duration-200"
+              >
+                Blog Admin
+              </a>
+              <span className="text-gray-500 mx-2">|</span>
+              <a
+                href="/admin/projects"
+                className="text-xs text-gray-500 hover:text-orange-500 transition-colors duration-200"
+              >
+                Projects Admin
+              </a>
+            </div>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">{t('footer.services.title')}</h3>
+            <ul className="space-y-2">
+              <li><Link to="/services" className="text-gray-300 hover:text-orange-500 transition-colors duration-200">{t('services.app.title')}</Link></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-orange-500 transition-colors duration-200">{t('services.web.title')}</Link></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-orange-500 transition-colors duration-200">{t('services.automation.title')}</Link></li>
               <li><Link to="/services" className="text-gray-300 hover:text-orange-500 transition-colors duration-200">{t('services.consulting.title')}</Link></li>
             </ul>
           </div>
