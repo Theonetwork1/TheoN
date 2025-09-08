@@ -43,16 +43,6 @@ const Footer = () => {
               <span className="text-xs text-gray-500">
                 Professional Tech Solutions
               </span>
-            </div>
-          </div>
-
-          {/* Services */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">{t('footer.services.title')}</h3>
-            <ul className="space-y-2">
-              <li><Link to="/services" className="text-gray-300 hover:text-orange-500 transition-colors duration-200">{t('services.app.title')}</Link></li>
-              <li><Link to="/services" className="text-gray-300 hover:text-orange-500 transition-colors duration-200">{t('services.web.title')}</Link></li>
-              <li><Link to="/services" className="text-gray-300 hover:text-orange-500 transition-colors duration-200">{t('services.automation.title')}</Link></li>
               <li><Link to="/services" className="text-gray-300 hover:text-orange-500 transition-colors duration-200">{t('services.consulting.title')}</Link></li>
             </ul>
           </div>
