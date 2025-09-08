@@ -40,19 +40,9 @@ const Footer = () => {
             </div>
             
             <div className="mt-6">
-              <a
-                href="/admin/blog"
-                className="text-xs text-gray-500 hover:text-orange-500 transition-colors duration-200"
-              >
-                Blog Admin
-              </a>
-              <span className="text-gray-500 mx-2">|</span>
-              <a
-                href="/admin/projects"
-                className="text-xs text-gray-500 hover:text-orange-500 transition-colors duration-200"
-              >
-                Projects Admin
-              </a>
+              <span className="text-xs text-gray-500">
+                Professional Tech Solutions
+              </span>
             </div>
           </div>
 
