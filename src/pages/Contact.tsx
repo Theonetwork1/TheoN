@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -12,12 +12,47 @@ const Contact = () => {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+        }
+      });
+    }, observerOptions);
+
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
+    
+    // Create WhatsApp message
+    const message = `Hi! I'm ${formData.name}.\n\nSubject: ${formData.subject}\n\nMessage: ${formData.message}\n\nEmail: ${formData.email}`;
+    const whatsappUrl = `https://wa.me/+17745069615?text=${encodeURIComponent(message)}`;
+    
+    // Open WhatsApp
+    window.open(whatsappUrl, '_blank');
+    
+    // Show success message
     setIsSubmitted(true);
     setTimeout(() => setIsSubmitted(false), 3000);
+    
+    // Reset form
+    setFormData({
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -30,9 +65,9 @@ const Contact = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-slate-50 to-white py-20">
+      <header className="bg-gradient-to-br from-slate-50 to-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+          <div className="text-center animate-fade-in">
             <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
               {t('contact.title')}
             </h1>
@@ -41,31 +76,31 @@ const Contact = () => {
             </p>
           </div>
         </div>
-      </section>
+      </header>
 
       {/* Contact Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Contact Form */}
-            <div>
+            <div className="animate-on-scroll animate-slide-in-left">
               <h2 className="text-3xl font-bold text-slate-900 mb-8">
                 Send us a message
               </h2>
               
               {isSubmitted ? (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center animate-scale-in">
                   <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-green-800 mb-2">
                     Message Sent Successfully!
                   </h3>
                   <p className="text-green-600">
-                    Thank you for your message. We'll get back to you within 24 hours.
+                    Your message has been sent via WhatsApp. We'll get back to you within 24 hours.
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div>
+                  <div className="animate-slide-in-left animate-delay-100">
                     <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
                       {t('contact.form.name')}
                     </label>
@@ -80,7 +115,7 @@ const Contact = () => {
                     />
                   </div>
 
-                  <div>
+                  <div className="animate-slide-in-left animate-delay-200">
                     <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                       {t('contact.form.email')}
                     </label>
@@ -95,7 +130,7 @@ const Contact = () => {
                     />
                   </div>
 
-                  <div>
+                  <div className="animate-slide-in-left animate-delay-300">
                     <label htmlFor="subject" className="block text-sm font-medium text-slate-700 mb-2">
                       {t('contact.form.subject')}
                     </label>
@@ -110,7 +145,7 @@ const Contact = () => {
                     />
                   </div>
 
-                  <div>
+                  <div className="animate-slide-in-left animate-delay-400">
                     <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-2">
                       {t('contact.form.message')}
                     </label>
@@ -127,7 +162,7 @@ const Contact = () => {
 
                   <button
                     type="submit"
-                    className="w-full inline-flex items-center justify-center px-6 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105"
+                    className="w-full inline-flex items-center justify-center px-6 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 btn-animate animate-slide-in-left animate-delay-500"
                   >
                     <Send className="w-5 h-5 mr-2" />
                     {t('contact.form.submit')}
@@ -137,14 +172,14 @@ const Contact = () => {
             </div>
 
             {/* Contact Information */}
-            <div>
+            <div className="animate-on-scroll animate-slide-in-right">
               <h2 className="text-3xl font-bold text-slate-900 mb-8">
                 Get in touch
               </h2>
               
               <div className="space-y-8">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start space-x-4 animate-slide-in-right animate-delay-100">
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0 hover-lift">
                     <Mail className="w-6 h-6 text-orange-600" />
                   </div>
                   <div>
@@ -154,8 +189,8 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start space-x-4 animate-slide-in-right animate-delay-200">
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0 hover-lift">
                     <Phone className="w-6 h-6 text-orange-600" />
                   </div>
                   <div>
@@ -165,8 +200,8 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start space-x-4 animate-slide-in-right animate-delay-300">
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0 hover-lift">
                     <MapPin className="w-6 h-6 text-orange-600" />
                   </div>
                   <div>
@@ -176,8 +211,8 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start space-x-4 animate-slide-in-right animate-delay-400">
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0 hover-lift">
                     <Clock className="w-6 h-6 text-orange-600" />
                   </div>
                   <div>
@@ -189,28 +224,30 @@ const Contact = () => {
               </div>
 
               {/* Quick Contact Actions */}
-              <div className="mt-12 space-y-4">
+              <div className="mt-12 space-y-4 animate-slide-in-right animate-delay-500">
                 <h3 className="text-lg font-semibold text-slate-900 mb-4">
                   Quick Actions
                 </h3>
                 <div className="space-y-3">
                   <a
                     href="mailto:hello@theonetwork.com"
-                    className="block w-full text-center px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg transition-colors duration-300"
+                    className="block w-full text-center px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg transition-colors duration-300 hover-lift"
                   >
                     Send Email
                   </a>
                   <a
-                    href="https://wa.me/17745069615"
+                    href="https://wa.me/+17745069615"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full text-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors duration-300"
+                    className="block w-full text-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors duration-300 hover-lift"
                   >
                     WhatsApp Chat
                   </a>
                   <a
-                    href="mailto:hello@theonetwork.com?subject=Consultation Request"
-                    className="block w-full text-center px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors duration-300"
+                    href="https://wa.me/+17745069615?text=Hi! I'd like to schedule a consultation."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-center px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors duration-300 hover-lift"
                   >
                     Schedule Consultation
                   </a>
@@ -224,7 +261,7 @@ const Contact = () => {
       {/* FAQ Section */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 animate-on-scroll">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
               Frequently Asked Questions
             </h2>
@@ -252,14 +289,14 @@ const Contact = () => {
                 answer: 'Absolutely! We serve clients worldwide and offer multilingual support in English, French, and Haitian Creole.',
               },
             ].map((faq, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+              <article key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 animate-on-scroll hover-lift" style={{ animationDelay: `${index * 0.1}s` }}>
                 <h3 className="text-lg font-semibold text-slate-900 mb-3">
                   {faq.question}
                 </h3>
                 <p className="text-slate-600 leading-relaxed">
                   {faq.answer}
                 </p>
-              </div>
+              </article>
             ))}
           </div>
         </div>

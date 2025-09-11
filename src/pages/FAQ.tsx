@@ -1,8 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle, MessageCircle } from 'lucide-react';
 
 const FAQ = () => {
   const [openItems, setOpenItems] = useState<number[]>([]);
+
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+        }
+      });
+    }, observerOptions);
+
+    const elements = document.querySelectorAll('.animate-on-scroll');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
 
   const toggleItem = (index: number) => {
     setOpenItems(prev => 
@@ -102,11 +122,11 @@ const FAQ = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-slate-50 to-white py-20">
+      <header className="bg-gradient-to-br from-slate-50 to-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+          <div className="text-center animate-fade-in">
             <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center animate-scale-in">
                 <HelpCircle className="w-8 h-8 text-white" />
               </div>
             </div>
@@ -118,13 +138,13 @@ const FAQ = () => {
             </p>
           </div>
         </div>
-      </section>
+      </header>
 
       {/* FAQ Content */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {faqData.map((category, categoryIndex) => (
-            <div key={categoryIndex} className="mb-12">
+            <div key={categoryIndex} className="mb-12 animate-on-scroll" style={{ animationDelay: `${categoryIndex * 0.1}s` }}>
               <h2 className="text-2xl font-bold text-slate-900 mb-8 pb-4 border-b border-gray-200">
                 {category.category}
               </h2>
@@ -135,13 +155,16 @@ const FAQ = () => {
                   const isOpen = openItems.includes(globalIndex);
                   
                   return (
-                    <div
+                    <article
                       key={itemIndex}
-                      className="bg-slate-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-200"
+                      className="bg-slate-50 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-200 animate-slide-in-left"
+                      style={{ animationDelay: `${categoryIndex * 0.1 + itemIndex * 0.05}s` }}
                     >
                       <button
                         onClick={() => toggleItem(globalIndex)}
                         className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-slate-100 transition-colors duration-200"
+                        aria-expanded={isOpen}
+                        aria-controls={`faq-answer-${globalIndex}`}
                       >
                         <span className="text-lg font-semibold text-slate-900 pr-4">
                           {item.question}
@@ -154,13 +177,13 @@ const FAQ = () => {
                       </button>
                       
                       {isOpen && (
-                        <div className="px-6 pb-4">
+                        <div id={`faq-answer-${globalIndex}`} className="px-6 pb-4 animate-fade-in">
                           <p className="text-slate-600 leading-relaxed">
                             {item.answer}
                           </p>
                         </div>
                       )}
-                    </div>
+                    </article>
                   );
                 })}
               </div>
@@ -172,9 +195,9 @@ const FAQ = () => {
       {/* Still Have Questions Section */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-white rounded-2xl shadow-lg p-8">
+          <div className="bg-white rounded-2xl shadow-lg p-8 animate-on-scroll hover-lift">
             <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center animate-scale-in">
                 <MessageCircle className="w-8 h-8 text-white" />
               </div>
             </div>
@@ -189,17 +212,17 @@ const FAQ = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://wa.me/17745069615?text=Hi! I have a question about your services."
+                href="https://wa.me/+17745069615?text=Hi! I have a question about your services."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors duration-300"
+                className="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors duration-300 btn-animate"
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
                 WhatsApp Chat
               </a>
               <a
                 href="mailto:hello@theonetwork.com?subject=Question about your services"
-                className="inline-flex items-center px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors duration-300"
+                className="inline-flex items-center px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors duration-300 btn-animate"
               >
                 Send Email
               </a>
@@ -210,7 +233,7 @@ const FAQ = () => {
 
       {/* Quick Contact */}
       <section className="py-16 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-on-scroll">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
             Ready to Get Started?
           </h2>
@@ -218,10 +241,10 @@ const FAQ = () => {
             Book your free consultation today and let's discuss your project
           </p>
           <a
-            href="https://wa.me/17745069615?text=Hi! I'd like to book a free consultation with Theo Network."
+            href="https://wa.me/+17745069615?text=Hi! I'd like to book a free consultation with Theo Network."
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105"
+            className="inline-flex items-center px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 btn-animate"
           >
             Book Free Consultation
           </a>
