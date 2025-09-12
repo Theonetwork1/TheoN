@@ -43,8 +43,7 @@ const Footer = () => {
               <span className="text-xs text-gray-500">
                 Professional Tech Solutions
               </span>
-              <li><Link to="/services" className="text-gray-300 hover:text-orange-500 transition-colors duration-200">{t('services.consulting.title')}</Link></li>
-            </ul>
+            </div>
           </div>
 
           {/* Company */}
@@ -53,29 +52,20 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link 
+                  to="/services" 
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="text-gray-300 hover:text-orange-500 transition-colors duration-200"
+                >
+                  {t('nav.services')}
+                </Link>
+              </li>
+              <li>
+                <Link 
                   to="/about" 
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   className="text-gray-300 hover:text-orange-500 transition-colors duration-200"
                 >
                   {t('nav.about')}
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/projects" 
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  className="text-gray-300 hover:text-orange-500 transition-colors duration-200"
-                >
-                  {t('nav.projects')}
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/blog" 
-                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                  className="text-gray-300 hover:text-orange-500 transition-colors duration-200"
-                >
-                  {t('nav.blog')}
                 </Link>
               </li>
               <li>
