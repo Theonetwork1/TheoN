@@ -112,6 +112,7 @@ html {
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
 }
 
 .btn-animate::before {
@@ -127,6 +128,49 @@ html {
 
 .btn-animate:hover::before {
   left: 100%;
+}
+
+/* Video optimization and accessibility */
+video {
+  /* Ensure video covers the entire container */
+  object-fit: cover;
+  /* Optimize for performance */
+  will-change: auto;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  video {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .animate-fade-in,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-scale-in {
+    animation: none !important;
+  }
+  
+  .hover-lift:hover {
+    transform: none !important;
+  }
+}
+
+/* Enhanced text shadows for better readability over video */
+.drop-shadow-2xl {
+  filter: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15)) drop-shadow(0 0 15px rgb(0 0 0 / 0.3));
+}
+
+.drop-shadow-lg {
+  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1)) drop-shadow(0 0 8px rgb(0 0 0 / 0.2));
+}
+
+/* Backdrop blur support */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 /* Loading animation for images */

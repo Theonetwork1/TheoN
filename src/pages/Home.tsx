@@ -96,14 +96,46 @@ const Home = () => {
       </div>
 
       {/* Hero Section */}
-      <section ref={heroRef} className="relative bg-gradient-to-br from-slate-50 to-white py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-50/20 to-transparent"></div>
+      <section ref={heroRef} className="relative py-20 overflow-hidden min-h-screen flex items-center">
+        {/* Background Video */}
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+            poster="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080"
+          >
+            <source
+              src="https://videos.pexels.com/video-files/3129957/3129957-uhd_3840_2160_30fps.mp4"
+              type="video/mp4"
+            />
+            <source
+              src="https://videos.pexels.com/video-files/3129957/3129957-hd_1920_1080_30fps.mp4"
+              type="video/mp4"
+            />
+            {/* Fallback image for browsers that don't support video */}
+            <img
+              src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080"
+              alt="Technology workspace background"
+              className="w-full h-full object-cover"
+            />
+          </video>
+          
+          {/* Video Overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900/70 via-slate-800/60 to-orange-900/50"></div>
+          
+          {/* Additional overlay for mobile optimization */}
+          <div className="absolute inset-0 bg-black/20 md:bg-transparent"></div>
+        </div>
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center animate-on-scroll">
-            <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight animate-fade-in">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight animate-fade-in drop-shadow-2xl">
               {t('home.hero.title')}
             </h1>
-            <p className="text-xl text-slate-600 mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in animate-delay-200">
+            <p className="text-xl text-gray-100 mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in animate-delay-200 drop-shadow-lg">
               {t('home.hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in animate-delay-300">
@@ -111,14 +143,14 @@ const Home = () => {
                 href="https://wa.me/+17745069615?text=Hi! I'd like to book a consultation with Theo Network."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 btn-animate"
+                className="inline-flex items-center px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg shadow-2xl transition-all duration-300 transform hover:scale-105 btn-animate backdrop-blur-sm"
               >
                 {t('home.hero.cta')}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </a>
               <Link
                 to="/services"
-                className="inline-flex items-center px-8 py-4 bg-white hover:bg-gray-50 text-slate-800 font-semibold rounded-lg shadow-lg border border-gray-200 transition-all duration-300 hover-lift"
+                className="inline-flex items-center px-8 py-4 bg-white/90 hover:bg-white text-slate-800 font-semibold rounded-lg shadow-2xl border border-white/20 transition-all duration-300 hover-lift backdrop-blur-sm"
               >
                 View Our Services
               </Link>
@@ -128,7 +160,7 @@ const Home = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 animate-on-scroll">
             {stats.map((stat, index) => (
