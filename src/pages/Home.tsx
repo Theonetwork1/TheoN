@@ -234,61 +234,47 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: 'EliteShop',
-                description: 'Premium e-commerce platform with modern design and seamless shopping experience',
-                image: '/Capture d\'écran 2025-07-22 171005 copy.png',
-                category: 'E-Commerce'
+                title: 'Bella Beauty Studio',
+                description: 'Comprehensive appointment management system for beauty salon with online booking and client management',
+                category: 'Beauty & Wellness'
               },
               {
                 title: 'Fylisca',
                 description: 'Natural hair care platform promoting healthy hair growth solutions',
-                image: '/Capture d\'écran 2025-05-26 021825 copy.png',
                 category: 'Beauty & Wellness'
               },
               {
                 title: 'Kayanu',
                 description: 'Elegant skincare brand celebrating natural beauty with clean design',
-                image: '/Capture d\'écran 2025-06-01 012837 copy.png',
                 category: 'Skincare'
               }
             ].map((project, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll hover-lift"
+                className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll hover-lift"
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
-                <div className="relative group">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                      {project.category}
-                    </span>
-                  </div>
+                <div className="mb-4">
+                  <span className="bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    {project.category}
+                  </span>
                 </div>
 
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-slate-900 mb-3">
-                    {project.title}
-                  </h3>
-                  <p className="text-slate-600 mb-4 leading-relaxed">
-                    {project.description}
-                  </p>
-                  <a
-                    href="https://wa.me/+17745069615?text=Hi! I'd like to learn more about this project."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center text-orange-600 hover:text-orange-700 font-semibold transition-colors duration-200"
-                  >
-                    Learn More
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </a>
-                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-3">
+                  {project.title}
+                </h3>
+                <p className="text-slate-600 mb-4 leading-relaxed">
+                  {project.description}
+                </p>
+                <a
+                  href="https://wa.me/+17745069615?text=Hi! I'd like to learn more about this project."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-orange-600 hover:text-orange-700 font-semibold transition-colors duration-200"
+                >
+                  Learn More
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </a>
               </div>
             ))}
           </div>

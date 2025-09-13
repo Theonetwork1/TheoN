@@ -16,8 +16,6 @@ const translations = {
     'nav.home': 'Home',
     'nav.about': 'About',
     'nav.services': 'Services',
-    'nav.projects': 'Projects',
-    'nav.blog': 'Blog',
     'nav.contact': 'Contact',
     'nav.consultation': 'Book Consultation',
     
@@ -76,8 +74,6 @@ const translations = {
     'nav.home': 'Akèy',
     'nav.about': 'Konsènan',
     'nav.services': 'Sèvis yo',
-    'nav.projects': 'Pwojè yo',
-    'nav.blog': 'Blog',
     'nav.contact': 'Kontak',
     'nav.consultation': 'Rezèvye Konsèy',
     
@@ -136,8 +132,6 @@ const translations = {
     'nav.home': 'Accueil',
     'nav.about': 'À Propos',
     'nav.services': 'Services',
-    'nav.projects': 'Projets',
-    'nav.blog': 'Blog',
     'nav.contact': 'Contact',
     'nav.consultation': 'Réserver Consultation',
     
@@ -207,7 +201,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   );
 };
 
-export const useLanguage = () => {
+export const useLanguage = (): LanguageContextType => {
   const context = useContext(LanguageContext);
   if (context === undefined) {
     throw new Error('useLanguage must be used within a LanguageProvider');
