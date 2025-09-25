@@ -50,14 +50,14 @@ const Navbar = () => {
             
             <LanguageSwitcher />
             
-            <Link
-              to="/contact"
+            <a
+              href="https://wa.me/17745069615?text=Hi! I'd like to book a consultation with Theo Network."
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 transition-colors duration-200"
             >
-              <a href="https://wa.me/17745069615?text=Hi! I'd like to book a consultation with Theo Network." className="flex items-center">
-                {t('nav.consultation')}
-              </a>
-            </Link>
+              {t('nav.consultation')}
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -94,15 +94,15 @@ const Navbar = () => {
                 <LanguageSwitcher />
               </div>
               
-              <Link
-                to="/contact"
+              <a
+                href="https://wa.me/17745069615?text=Hi! I'd like to book a consultation with Theo Network."
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setIsOpen(false)}
                 className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white bg-orange-600 hover:bg-orange-700 transition-colors duration-200"
               >
-                <a href="https://wa.me/17745069615?text=Hi! I'd like to book a consultation with Theo Network.">
-                  {t('nav.consultation')}
-                </a>
-              </Link>
+                {t('nav.consultation')}
+              </a>
             </div>
           </div>
         )}
