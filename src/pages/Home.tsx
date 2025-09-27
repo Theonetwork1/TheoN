@@ -129,19 +129,13 @@ const Home = () => {
       {/* Main Hero Banner - Technology/Digital Focused */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-0">
-          <img
-            src="/Capture d'écran 2025-07-22 171005.png"
-            alt="Digital Technology Background - AI Interface"
-            className="absolute inset-0 w-full h-full object-cover opacity-40"
-            onError={(e) => {
-              console.log('Image failed to load:', e);
-              e.currentTarget.style.display = 'none';
-            }}
-          />
-          {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-slate-800/50 to-orange-900/60"></div>
-        </div>
+        <img
+          src="/Using a Mix of Tech Tools Improves Decision Quality.jpg"
+          alt="Hands typing on a laptop with digital interface overlay showing AI and tech tools"
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
+        />
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-slate-800/50 to-orange-900/60"></div>
 
         {/* Main Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -241,39 +235,12 @@ const Home = () => {
       </section>
 
       {/* Video Section - Full Screen */}
-      <section className="relative min-h-screen overflow-hidden bg-slate-900">
-        <video
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          onError={(e) => {
-            console.log('Video failed to load:', e);
-            e.currentTarget.style.display = 'none';
-          }}
-          ref={(video) => {
-            if (video) {
-              const observer = new IntersectionObserver(
-                (entries) => {
-                  entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                      video.play().catch(console.log);
-                    } else {
-                      video.pause();
-                    }
-                  });
-                },
-                { threshold: 0.5 }
-              );
-              observer.observe(video);
-            }
-          }}
-        >
-          <source src="/hero-video.mp4" type="video/mp4" />
-          <source src="/hero-video.webm" type="video/webm" />
-          Your browser does not support the video tag.
-        </video>
-        
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-900">
+        <img
+          src="/Using a Mix of Tech Tools Improves Decision Quality.jpg"
+          alt="Digital interface with AI and data tools over hands typing on a keyboard"
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
+        />
         {/* Fallback background */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-orange-900"></div>
       </section>
