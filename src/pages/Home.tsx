@@ -237,12 +237,46 @@ const Home = () => {
       {/* Video Section - Full Screen */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-900">
         <img
-          src="/Using a Mix of Tech Tools Improves Decision Quality.jpg"
-          alt="Digital interface with AI and data tools over hands typing on a keyboard"
+          src="/WhatsApp Image 2025-09-27 à 18.49.43_28335d9b.jpg"
+          alt="Professional man working on laptop with digital code and programming interface overlay"
           className="absolute inset-0 w-full h-full object-cover opacity-40"
         />
         {/* Fallback background */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-orange-900"></div>
+        
+        {/* Content Overlay */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="animate-on-scroll">
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 leading-tight animate-fade-in">
+              <span className="bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
+                Innovation Meets Excellence
+              </span>
+            </h2>
+            <p className="text-xl md:text-2xl text-blue-100 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in animate-delay-200">
+              Where cutting-edge technology meets professional expertise to deliver exceptional results
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in animate-delay-300">
+              <a
+                href="https://wa.me/+17745069615?text=Hi! I'd like to learn more about your innovative solutions."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center px-10 py-5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-lg rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-blue-500/25 btn-animate"
+              >
+                Discover Our Solutions
+                <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+              </a>
+              <a
+                href="https://wa.me/+17745069615?text=Hi! I'd like to schedule a consultation to discuss my project."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center px-10 py-5 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-bold text-lg rounded-2xl border border-white/20 transition-all duration-300 transform hover:scale-105 hover-lift"
+              >
+                Schedule Consultation
+                <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+              </a>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Testimonials Carousel */}
