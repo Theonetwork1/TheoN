@@ -21,27 +21,8 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
     setError('');
 
     try {
-      // Vérifier si Supabase est configuré
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      console.log('Saving email to Supabase:', email);
       
-      if (!supabaseUrl || !supabaseKey || supabaseUrl === 'YOUR_SUPABASE_URL' || supabaseUrl === 'https://demo.supabase.co') {
-        // Mode démo - simuler une soumission réussie
-        console.log('Demo mode: Email would be saved:', email);
-        console.log('To enable real saving, configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env file');
-        
-        // Simuler un délai de réseau
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        setIsSuccess(true);
-        setTimeout(() => {
-          onClose();
-          setIsSuccess(false);
-          setEmail('');
-        }, 3000);
-        return;
-      }
-
       const { error } = await supabase
         .from('Theo_email')
         .insert([
@@ -52,9 +33,11 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
         ]);
 
       if (error) {
+        console.error('Supabase error:', error);
         throw error;
       }
 
+      console.log('Email saved successfully!');
       setIsSuccess(true);
       setTimeout(() => {
         onClose();
@@ -64,9 +47,13 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
     } catch (error: any) {
       console.error('Error saving email:', error);
       
-      // Si c'est une erreur de réseau, afficher un message plus spécifique
+      // Messages d'erreur spécifiques
       if (error.message && error.message.includes('Failed to fetch')) {
         setError('Problème de connexion. Vérifiez votre configuration Supabase.');
+      } else if (error.message && error.message.includes('duplicate key')) {
+        setError('Cette adresse email est déjà enregistrée.');
+      } else if (error.message && error.message.includes('relation "Theo_email" does not exist')) {
+        setError('Table non trouvée. Créez la table Theo_email dans Supabase.');
       } else {
         setError('Une erreur est survenue. Veuillez réessayer.');
       }
