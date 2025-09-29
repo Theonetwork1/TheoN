@@ -232,6 +232,8 @@ const Home = () => {
           </video>
           {/* Overlay for better text readability - positioned to not cover face */}
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-slate-800/30 to-transparent"></div>
+          {/* Additional overlay for mobile text readability */}
+          <div className="absolute inset-0 bg-black/30 sm:bg-transparent"></div>
           
           {/* Sound indicator */}
           {isVideoMuted && (
@@ -241,41 +243,41 @@ const Home = () => {
           )}
         </div>
 
-        {/* Main Content - Perfectly centered */}
+        {/* Main Content - Responsive and centered */}
         <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="max-w-3xl mx-auto animate-on-scroll">
-              {/* Heading - centered */}
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight animate-fade-in text-center">
+            <div className="max-w-[90%] sm:max-w-3xl mx-auto animate-on-scroll">
+              {/* Heading - responsive sizing */}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold sm:font-bold text-white mb-4 sm:mb-6 md:mb-8 leading-tight animate-fade-in text-center">
                 <span className="bg-gradient-to-r from-white via-orange-100 to-orange-200 bg-clip-text text-transparent">
                   Digital Innovation
                 </span>
               </h1>
               
-              {/* Subheading - centered */}
-              <p className="text-xl md:text-2xl text-orange-100 mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in animate-delay-200 text-center">
+              {/* Subheading - responsive sizing with better spacing */}
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-orange-100 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in animate-delay-200 text-center px-2">
                 Transform your business with cutting-edge technology solutions. We build the future, today.
               </p>
               
-              {/* CTA Buttons - centered */}
-              <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in animate-delay-300">
+              {/* CTA Buttons - responsive and stacked on mobile */}
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 justify-center animate-fade-in animate-delay-300">
                 <a
                   href="https://wa.me/+17745069615?text=Hi! I'd like to discuss a digital transformation project."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center px-12 py-6 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-xl rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 btn-animate"
+                  className="group inline-flex items-center justify-center px-4 sm:px-8 md:px-12 py-2 sm:py-4 md:py-6 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-semibold sm:font-bold text-sm sm:text-base md:text-lg lg:text-xl rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 btn-animate"
                   onClick={handleVideoInteraction}
                 >
                   Start Your Digital Journey
-                  <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRight className="ml-2 sm:ml-3 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
                 <Link
                   to="/services"
-                  className="group inline-flex items-center px-12 py-6 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-bold text-xl rounded-2xl border border-white/20 transition-all duration-300 transform hover:scale-105 hover-lift"
+                  className="group inline-flex items-center justify-center px-4 sm:px-8 md:px-12 py-2 sm:py-4 md:py-6 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-semibold sm:font-bold text-sm sm:text-base md:text-lg lg:text-xl rounded-lg sm:rounded-xl md:rounded-2xl border border-white/20 transition-all duration-300 transform hover:scale-105 hover-lift"
                   onClick={handleVideoInteraction}
                 >
                   Explore Solutions
-                  <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRight className="ml-2 sm:ml-3 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </div>
             </div>
