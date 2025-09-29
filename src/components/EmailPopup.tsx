@@ -25,9 +25,14 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       
-      if (!supabaseUrl || !supabaseKey || supabaseUrl === 'YOUR_SUPABASE_URL') {
+      if (!supabaseUrl || !supabaseKey || supabaseUrl === 'YOUR_SUPABASE_URL' || supabaseUrl === 'https://demo.supabase.co') {
         // Mode démo - simuler une soumission réussie
         console.log('Demo mode: Email would be saved:', email);
+        console.log('To enable real saving, configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env file');
+        
+        // Simuler un délai de réseau
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
         setIsSuccess(true);
         setTimeout(() => {
           onClose();
@@ -57,8 +62,14 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
         setEmail('');
       }, 3000);
     } catch (error: any) {
-      setError('Une erreur est survenue. Veuillez réessayer.');
       console.error('Error saving email:', error);
+      
+      // Si c'est une erreur de réseau, afficher un message plus spécifique
+      if (error.message && error.message.includes('Failed to fetch')) {
+        setError('Problème de connexion. Vérifiez votre configuration Supabase.');
+      } else {
+        setError('Une erreur est survenue. Veuillez réessayer.');
+      }
     } finally {
       setIsSubmitting(false);
     }
