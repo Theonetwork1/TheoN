@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Smartphone, Globe, Cog, TrendingUp, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import EmailPopup from '../components/EmailPopup';
 
 const Home = () => {
   const { t } = useLanguage();
@@ -14,6 +15,7 @@ const Home = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isVideoMuted, setIsVideoMuted] = useState(true);
+  const [showEmailPopup, setShowEmailPopup] = useState(false);
 
   useEffect(() => {
     const observerOptions = {
@@ -46,6 +48,15 @@ const Home = () => {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Afficher le popup email après 10 secondes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowEmailPopup(true);
+    }, 10000); // 10 secondes
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Auto-rotation des témoignages
@@ -576,6 +587,12 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Email Popup */}
+      <EmailPopup 
+        isOpen={showEmailPopup} 
+        onClose={() => setShowEmailPopup(false)} 
+      />
     </div>
   );
 };
