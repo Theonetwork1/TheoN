@@ -187,7 +187,7 @@ const Services = () => {
             Let's discuss your project and see how we can help you achieve your goals.
           </p>
           <a
-            href="https://wa.me/+17745069615?text=Hi! I'm ready to get started with Theo Network services."
+            href="https://wa.me/+17745069615?text=Hi! I'm ready to get started with Theonetwork services."
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 btn-animate"

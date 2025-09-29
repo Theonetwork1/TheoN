@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Facebook, Instagram, Twitter, Music } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
-import LanguageSwitcher from './LanguageSwitcher';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +18,13 @@ const Navbar = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  const socialLinks = [
+    { icon: Facebook, href: 'https://www.facebook.com/profile.php?id=61571632958090', label: 'Facebook' },
+    { icon: Instagram, href: 'https://www.instagram.com/theonetwork1?igsh=MTZvMnY0ZXJmMmJmaQ==', label: 'Instagram' },
+    { icon: Twitter, href: 'https://x.com/theonetwork', label: 'X (Twitter)' },
+    { icon: Music, href: 'https://tiktok.com/@theo_network', label: 'TikTok' },
+  ];
+
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,8 +33,8 @@ const Navbar = () => {
           <Link to="/" className="flex items-center space-x-2">
             <img 
               src="/TheoNetwork Logo (1).png" 
-              alt="Theo Network Logo" 
-              className="w-16 h-16 object-contain"
+              alt="Theonetwork Logo" 
+              className="w-20 h-20 object-contain"
             />
           </Link>
 
@@ -48,10 +54,27 @@ const Navbar = () => {
               </Link>
             ))}
             
-            <LanguageSwitcher />
+            {/* Social Media Icons */}
+            <div className="flex items-center space-x-3">
+              {socialLinks.map((social, index) => {
+                const IconComponent = social.icon;
+                return (
+                  <a
+                    key={index}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-orange-600 transition-colors duration-200"
+                    aria-label={social.label}
+                  >
+                    <IconComponent className="w-5 h-5" />
+                  </a>
+                );
+              })}
+            </div>
             
             <a
-              href="https://wa.me/17745069615?text=Hi! I'd like to book a consultation with Theo Network."
+              href="https://wa.me/17745069615?text=Hi! I'd like to book a consultation with Theonetwork."
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 transition-colors duration-200"
@@ -90,12 +113,29 @@ const Navbar = () => {
                 </Link>
               ))}
               
+              {/* Mobile Social Media Icons */}
               <div className="px-3 py-2">
-                <LanguageSwitcher />
+                <div className="flex items-center space-x-4">
+                  {socialLinks.map((social, index) => {
+                    const IconComponent = social.icon;
+                    return (
+                      <a
+                        key={index}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-600 hover:text-orange-600 transition-colors duration-200"
+                        aria-label={social.label}
+                      >
+                        <IconComponent className="w-6 h-6" />
+                      </a>
+                    );
+                  })}
+                </div>
               </div>
               
               <a
-                href="https://wa.me/17745069615?text=Hi! I'd like to book a consultation with Theo Network."
+                href="https://wa.me/17745069615?text=Hi! I'd like to book a consultation with Theonetwork."
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsOpen(false)}

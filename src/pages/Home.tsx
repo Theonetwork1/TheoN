@@ -8,10 +8,12 @@ const Home = () => {
   const heroRef = useRef<HTMLElement>(null);
   const servicesRef = useRef<HTMLElement>(null);
   const testimonialsRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   
   // État pour les animations interactives
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isVideoMuted, setIsVideoMuted] = useState(true);
 
   useEffect(() => {
     const observerOptions = {
@@ -55,6 +57,70 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Force video play
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      const playVideo = async () => {
+        try {
+          await video.play();
+          console.log('Video playing successfully');
+        } catch (error) {
+          console.log('Video play failed:', error);
+          // Try again after a short delay
+          setTimeout(() => {
+            video.play().catch(console.log);
+          }, 1000);
+        }
+      };
+      
+      if (video.readyState >= 3) {
+        playVideo();
+      } else {
+        video.addEventListener('canplay', playVideo);
+        return () => video.removeEventListener('canplay', playVideo);
+      }
+    }
+  }, []);
+
+  // Handle user interaction to unmute video
+  const handleVideoInteraction = () => {
+    const video = videoRef.current;
+    if (video && isVideoMuted) {
+      video.muted = false;
+      setIsVideoMuted(false);
+      console.log('Video unmuted');
+    }
+  };
+
+  // Handle scroll to mute/unmute video based on hero section visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      const video = videoRef.current;
+      const heroSection = heroRef.current;
+      
+      if (video && heroSection) {
+        const heroRect = heroSection.getBoundingClientRect();
+        const isHeroVisible = heroRect.bottom > 0 && heroRect.top < window.innerHeight;
+        
+        if (!isHeroVisible && !isVideoMuted) {
+          // Mute when leaving hero section
+          video.muted = true;
+          setIsVideoMuted(true);
+          console.log('Video muted due to scroll');
+        } else if (isHeroVisible && isVideoMuted) {
+          // Unmute when returning to hero section (if user had previously interacted)
+          video.muted = false;
+          setIsVideoMuted(false);
+          console.log('Video unmuted due to scroll back to hero');
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isVideoMuted]);
+
   const services = [
     {
       icon: <Smartphone className="w-8 h-8" />,
@@ -82,7 +148,7 @@ const Home = () => {
     {
       name: 'Jean-Baptiste Pierre',
       nationality: 'Haitian',
-      content: 'Theo Network a transformé complètement notre présence numérique. Leur expertise en développement d\'applications et automatisation de systèmes nous a fait économiser des mois de travail.',
+      content: 'Theonetwork a transformé complètement notre présence numérique. Leur expertise en développement d\'applications et automatisation de systèmes nous a fait économiser des mois de travail.',
       rating: 5,
     },
     {
@@ -94,7 +160,7 @@ const Home = () => {
     {
       name: 'Sarah Johnson',
       nationality: 'American',
-      content: 'Theo Network transformed our digital presence completely. Their expertise in app development and system automation saved us months of work.',
+      content: 'Theonetwork transformed our digital presence completely. Their expertise in app development and system automation saved us months of work.',
       rating: 5,
     },
     {
@@ -112,7 +178,7 @@ const Home = () => {
     {
       name: 'David Thompson',
       nationality: 'Canadian',
-      content: 'Exceptional quality and attention to detail. Theo Network\'s strategic consulting helped us optimize our tech strategy and achieve remarkable results.',
+      content: 'Exceptional quality and attention to detail. Theonetwork\'s strategic consulting helped us optimize our tech strategy and achieve remarkable results.',
       rating: 5,
     },
   ];
@@ -127,50 +193,80 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Main Hero Banner - Technology/Digital Focused */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img
-            src="/Capture d'écran 2025-07-22 171005.png"
-            alt="Digital Technology Background - AI Interface"
-            className="absolute inset-0 w-full h-full object-cover opacity-40"
+      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" style={{ marginBottom: 0 }}>
+        {/* Background Video - Full Screen */}
+        <div className="absolute inset-0" onClick={handleVideoInteraction}>
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            playsInline
+            muted={isVideoMuted}
+            className="absolute inset-0 w-full h-full object-cover"
             onError={(e) => {
-              console.log('Image failed to load:', e);
+              console.log('Video failed to load:', e);
               e.currentTarget.style.display = 'none';
             }}
-          />
-          {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-slate-800/50 to-orange-900/60"></div>
+            onLoadedData={(e) => {
+              console.log('Video loaded successfully');
+              e.currentTarget.play().catch(console.log);
+            }}
+            onCanPlay={(e) => {
+              console.log('Video can play');
+              e.currentTarget.play().catch(console.log);
+            }}
+          >
+            <source src="/theonetworkvideo.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          {/* Overlay for better text readability - positioned to not cover face */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-slate-800/30 to-transparent"></div>
+          
+          {/* Sound indicator */}
+          {isVideoMuted && (
+            <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
+              🔊 Click to unmute
+            </div>
+          )}
         </div>
 
-        {/* Main Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="animate-on-scroll">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-tight animate-fade-in">
-              <span className="bg-gradient-to-r from-white via-orange-100 to-orange-200 bg-clip-text text-transparent">
-                Digital Innovation
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-orange-100 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in animate-delay-200">
-              Transform your business with cutting-edge technology solutions. We build the future, today.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in animate-delay-300">
-              <a
-                href="https://wa.me/+17745069615?text=Hi! I'd like to discuss a digital transformation project."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center px-12 py-6 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-xl rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 btn-animate"
-              >
-                Start Your Digital Journey
-                <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
-              </a>
-              <Link
-                to="/services"
-                className="group inline-flex items-center px-12 py-6 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-bold text-xl rounded-2xl border border-white/20 transition-all duration-300 transform hover:scale-105 hover-lift"
-              >
-                Explore Solutions
-                <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
+        {/* Main Content - Perfectly centered */}
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="max-w-3xl mx-auto animate-on-scroll">
+              {/* Heading - centered */}
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight animate-fade-in text-center">
+                <span className="bg-gradient-to-r from-white via-orange-100 to-orange-200 bg-clip-text text-transparent">
+                  Digital Innovation
+                </span>
+              </h1>
+              
+              {/* Subheading - centered */}
+              <p className="text-xl md:text-2xl text-orange-100 mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in animate-delay-200 text-center">
+                Transform your business with cutting-edge technology solutions. We build the future, today.
+              </p>
+              
+              {/* CTA Buttons - centered */}
+              <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in animate-delay-300">
+                <a
+                  href="https://wa.me/+17745069615?text=Hi! I'd like to discuss a digital transformation project."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center px-12 py-6 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-xl rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 btn-animate"
+                  onClick={handleVideoInteraction}
+                >
+                  Start Your Digital Journey
+                  <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                </a>
+                <Link
+                  to="/services"
+                  className="group inline-flex items-center px-12 py-6 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-bold text-xl rounded-2xl border border-white/20 transition-all duration-300 transform hover:scale-105 hover-lift"
+                  onClick={handleVideoInteraction}
+                >
+                  Explore Solutions
+                  <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -178,7 +274,7 @@ const Home = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-white">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 animate-on-scroll">
             {stats.map((stat, index) => (
@@ -240,46 +336,57 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Video Section - Full Screen */}
-      <section className="relative min-h-screen overflow-hidden bg-slate-900">
-        <video
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+      {/* Banner Image Section with CTA */}
+      <div className="relative w-full banner-section" style={{ margin: 0, padding: 0, marginBottom: '4rem' }}>
+        <img
+          src="/theonetworkbanner.jpg"
+          alt="Theonetwork Banner"
+          className="w-full h-auto block"
+          style={{ display: 'block', margin: 0, padding: 0, marginBottom: 0 }}
           onError={(e) => {
-            console.log('Video failed to load:', e);
+            console.log('Banner image failed to load:', e);
             e.currentTarget.style.display = 'none';
           }}
-          ref={(video) => {
-            if (video) {
-              const observer = new IntersectionObserver(
-                (entries) => {
-                  entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                      video.play().catch(console.log);
-                    } else {
-                      video.pause();
-                    }
-                  });
-                },
-                { threshold: 0.5 }
-              );
-              observer.observe(video);
-            }
-          }}
-        >
-          <source src="/hero-video.mp4" type="video/mp4" />
-          <source src="/hero-video.webm" type="video/webm" />
-          Your browser does not support the video tag.
-        </video>
+        />
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-slate-900/30 to-slate-900/60"></div>
         
-        {/* Fallback background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-orange-900"></div>
-      </section>
+        {/* Text Block and CTA Button - Aligned with laptop on the right */}
+        <div className="absolute inset-0 flex items-center justify-end pr-4 sm:pr-6 md:pr-8 lg:pr-12 xl:pr-16">
+          <div className="text-center max-w-sm lg:max-w-md">
+            {/* Two-line heading - perfectly centered */}
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 leading-tight">
+              <div className="bg-gradient-to-r from-white via-orange-100 to-orange-200 bg-clip-text text-transparent">
+                Build Smarter with
+              </div>
+              <div className="bg-gradient-to-r from-white via-orange-100 to-orange-200 bg-clip-text text-transparent">
+                Theonetwork
+              </div>
+            </h2>
+            
+            {/* Paragraph with controlled wrapping - centered */}
+            <p className="text-lg md:text-xl text-orange-100 mb-8 leading-relaxed max-w-xs mx-auto">
+              Professional digital solutions to bring your ideas to life
+            </p>
+            
+            {/* CTA Button - centered */}
+            <div className="flex justify-center">
+              <a
+                href="https://wa.me/+17745069615?text=Hi! I'm interested in your services."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-lg rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25"
+              >
+                Get Started Today
+                <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Testimonials Carousel */}
-      <section ref={testimonialsRef} className="py-20 bg-slate-50">
+      <section ref={testimonialsRef} className="pt-64 pb-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-on-scroll">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
@@ -449,7 +556,7 @@ const Home = () => {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in animate-delay-400">
           <a
-            href="https://wa.me/+17745069615?text=Hi! I'm ready to transform my business with Theo Network."
+            href="https://wa.me/+17745069615?text=Hi! I'm ready to transform my business with Theonetwork."
             target="_blank"
             rel="noopener noreferrer"
                 className="group inline-flex items-center px-10 py-5 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-lg rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 btn-animate"

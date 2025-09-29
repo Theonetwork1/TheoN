@@ -7,6 +7,27 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Remove default spacing from images */
+img {
+  display: block;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+}
+
+/* Remove spacing from banner section */
+.banner-section {
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Ensure no spacing between sections */
+.banner-section + * {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
 /* Fade in animation */
 @keyframes fadeIn {
   from {

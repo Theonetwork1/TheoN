@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
+import { Mail, Send, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const Contact = () => {
@@ -189,38 +189,6 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-4 animate-slide-in-right animate-delay-200">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0 hover-lift">
-                    <Phone className="w-6 h-6 text-orange-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-900 mb-1">Phone</h3>
-                    <p className="text-slate-600">{t('contact.info.phone')}</p>
-                    <p className="text-sm text-slate-500">Available for urgent inquiries</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4 animate-slide-in-right animate-delay-300">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0 hover-lift">
-                    <MapPin className="w-6 h-6 text-orange-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-900 mb-1">Location</h3>
-                    <p className="text-slate-600">{t('contact.info.address')}</p>
-                    <p className="text-sm text-slate-500">Serving clients globally</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4 animate-slide-in-right animate-delay-400">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0 hover-lift">
-                    <Clock className="w-6 h-6 text-orange-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-900 mb-1">Business Hours</h3>
-                    <p className="text-slate-600">Monday - Friday: 9:00 AM - 6:00 PM EST</p>
-                    <p className="text-slate-600">Saturday - Sunday: By appointment</p>
-                  </div>
-                </div>
               </div>
 
               {/* Quick Contact Actions */}
@@ -258,49 +226,6 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-20 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-on-scroll">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              Quick answers to common questions about our services
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              {
-                question: 'How long does a typical project take?',
-                answer: 'Project timelines vary based on complexity. Simple websites take 2-4 weeks, while complex applications can take 2-6 months. We provide detailed timelines during consultation.',
-              },
-              {
-                question: 'Do you offer ongoing support?',
-                answer: 'Yes, we provide comprehensive support and maintenance packages to ensure your solution continues to perform optimally after launch.',
-              },
-              {
-                question: 'What technologies do you specialize in?',
-                answer: 'We work with modern technologies including React, Next.js, Node.js, Python, React Native, and cloud platforms like AWS and Vercel.',
-              },
-              {
-                question: 'Do you work with international clients?',
-                answer: 'Absolutely! We serve clients worldwide and offer multilingual support in English, French, and Haitian Creole.',
-              },
-            ].map((faq, index) => (
-              <article key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 animate-on-scroll hover-lift" style={{ animationDelay: `${index * 0.1}s` }}>
-                <h3 className="text-lg font-semibold text-slate-900 mb-3">
-                  {faq.question}
-                </h3>
-                <p className="text-slate-600 leading-relaxed">
-                  {faq.answer}
-                </p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

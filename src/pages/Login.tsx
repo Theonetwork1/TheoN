@@ -154,10 +154,10 @@ const Login = () => {
                 <Link to="/" className="flex items-center space-x-2">
                   <img 
                     src="/theo-network-logo.png" 
-                    alt="Theo Network Logo" 
-                    className="w-8 h-8 object-contain"
+                    alt="Theonetwork Logo" 
+                    className="w-12 h-12 object-contain"
                   />
-                  <span className="text-xl font-bold text-slate-800">Theo Network</span>
+                  <span className="text-xl font-bold text-slate-800">Theonetwork</span>
                 </Link>
                 <span className="text-gray-300">|</span>
                 <span className="text-gray-600">Client Dashboard</span>
@@ -418,8 +418,8 @@ const Login = () => {
           <Link to="/" className="inline-flex items-center space-x-2 mb-6">
             <img 
               src="/TheoNetwork Logo (1).png" 
-              alt="Theo Network Logo" 
-              className="w-16 h-16 object-contain"
+              alt="Theonetwork Logo" 
+              className="w-20 h-20 object-contain"
             />
           </Link>
           
@@ -427,7 +427,7 @@ const Login = () => {
             {isLogin ? 'Welcome Back' : 'Create Account'}
           </h2>
           <p className="text-slate-600">
-            {isLogin ? 'Sign in to access your client portal' : 'Join Theo Network today'}
+            {isLogin ? 'Sign in to access your client portal' : 'Join Theonetwork today'}
           </p>
         </div>
 

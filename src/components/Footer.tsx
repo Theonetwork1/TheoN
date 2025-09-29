@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { Mail, Phone, Facebook, Twitter, Instagram } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const Footer = () => {
@@ -15,10 +15,10 @@ const Footer = () => {
             <div className="flex items-center space-x-2 mb-4">
               <img 
                 src="/TheoNetwork Logo (1).png" 
-                alt="Theo Network Logo" 
-                className="w-10 h-10 object-contain"
+                alt="Theonetwork Logo" 
+                className="w-14 h-14 object-contain"
               />
-              <span className="text-xl font-bold">Theo Network</span>
+              <span className="text-xl font-bold">Theonetwork</span>
             </div>
             <p className="text-gray-300 mb-6 max-w-md">
               {t('footer.tagline')}
@@ -32,10 +32,6 @@ const Footer = () => {
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-orange-500" />
                 <span className="text-gray-300">{t('contact.info.phone')}</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <MapPin className="w-5 h-5 text-orange-500" />
-                <span className="text-gray-300">{t('contact.info.address')}</span>
               </div>
             </div>
             
@@ -94,7 +90,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <div className="flex space-x-4 mb-4 md:mb-0">
             <a 
-              href="https://facebook.com/Theonetwork1" 
+              href="https://www.facebook.com/profile.php?id=61571632958090" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-orange-500 transition-colors duration-200"
@@ -110,15 +106,7 @@ const Footer = () => {
               <Twitter className="w-5 h-5" />
             </a>
             <a 
-              href="https://linkedin.com/company/Theonetwork1" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-orange-500 transition-colors duration-200"
-            >
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a 
-              href="https://instagram.com/Theonetwork1" 
+              href="https://www.instagram.com/theonetwork1?igsh=MTZvMnY0ZXJmMmJmaQ==" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-orange-500 transition-colors duration-200"
@@ -126,7 +114,7 @@ const Footer = () => {
               <Instagram className="w-5 h-5" />
             </a>
             <a 
-              href="https://tiktok.com/@Theonetwork1" 
+              href="https://tiktok.com/@theo_network" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-orange-500 transition-colors duration-200"

@@ -100,7 +100,7 @@ const About = () => {
               </p>
               <p className="text-lg text-slate-600 leading-relaxed">
                 Founded with a vision to bridge the gap between technology and business success, 
-                Theo Network has grown to become a trusted partner for companies looking to 
+                Theonetwork has grown to become a trusted partner for companies looking to 
                 leverage technology for competitive advantage.
               </p>
             </div>
@@ -109,7 +109,7 @@ const About = () => {
                 <div className="text-center">
                   <img 
                     src="/TheoNetwork Logo (1).png"
-                    alt="Theo Network Logo" 
+                    alt="Theonetwork Logo" 
                     className="w-32 h-32 object-contain mx-auto mb-4 animate-scale-in"
                     loading="lazy"
                   />
@@ -152,7 +152,7 @@ const About = () => {
                 {t('about.owner.bio')}
               </p>
               <p className="text-lg text-slate-600 leading-relaxed mb-8">
-                Theshneider's commitment to excellence and innovation has made Theo Network 
+                Theshneider's commitment to excellence and innovation has made Theonetwork 
                 a leading choice for businesses seeking reliable technology partners. His 
                 multilingual approach ensures that clients from diverse backgrounds receive 
                 personalized service in their preferred language.
@@ -215,7 +215,7 @@ const About = () => {
             Let's discuss how we can help transform your business with innovative technology solutions.
           </p>
           <a
-            href="https://wa.me/+17745069615?text=Hi! I'm ready to work with Theo Network."
+            href="https://wa.me/+17745069615?text=Hi! I'm ready to work with Theonetwork."
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 btn-animate"

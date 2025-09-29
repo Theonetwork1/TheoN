@@ -41,14 +41,14 @@ const translations = {
     'services.consulting.desc': 'Expert guidance to optimize your tech strategy and operations',
     
     // About
-    'about.title': 'About Theo Network',
+    'about.title': 'About Theonetwork',
     'about.subtitle': 'Leading the future of digital transformation',
     'about.mission.title': 'Our Mission',
     'about.mission.desc': 'To empower businesses with innovative technology solutions that drive growth and efficiency.',
     'about.owner.title': 'Meet Our Founder',
     'about.owner.name': 'Theshneider Avril',
     'about.owner.role': 'Founder & CEO',
-    'about.owner.bio': 'With years of experience in tech consulting and development, Theshneider leads Theo Network with a vision to transform how businesses leverage technology.',
+    'about.owner.bio': 'With years of experience in tech consulting and development, Theshneider leads Theonetwork with a vision to transform how businesses leverage technology.',
     
     // Contact
     'contact.title': 'Get In Touch',
@@ -67,7 +67,7 @@ const translations = {
     'footer.services.title': 'Services',
     'footer.company.title': 'Company',
     'footer.support.title': 'Support',
-    'footer.rights': '2024 Theo Network. All rights reserved.',
+    'footer.rights': '2024 Theonetwork. All rights reserved.',
   },
   ht: {
     // Navigation
@@ -99,14 +99,14 @@ const translations = {
     'services.consulting.desc': 'Gid ekspè pou optimize estratèji ak operasyon teknoloji ou',
     
     // About
-    'about.title': 'Konsènan Theo Network',
+    'about.title': 'Konsènan Theonetwork',
     'about.subtitle': 'Ap dirije lavni transfòmasyon dijital la',
     'about.mission.title': 'Misyon Nou',
     'about.mission.desc': 'Pou bay biznis yo pouvwa ak solisyon teknoloji inovatè ki kondwi kwasans ak efikasite.',
     'about.owner.title': 'Konèt Fondatè Nou',
     'about.owner.name': 'Theshneider Avril',
     'about.owner.role': 'Fondatè ak PDG',
-    'about.owner.bio': 'Ak ane eksperyans nan konsèy ak devlopman teknoloji, Theshneider ap mennen Theo Network ak yon vizyon pou transfòme kijan biznis yo ap tire pati nan teknoloji.',
+    'about.owner.bio': 'Ak ane eksperyans nan konsèy ak devlopman teknoloji, Theshneider ap mennen Theonetwork ak yon vizyon pou transfòme kijan biznis yo ap tire pati nan teknoloji.',
     
     // Contact
     'contact.title': 'Rete Konekte',
@@ -125,7 +125,7 @@ const translations = {
     'footer.services.title': 'Sèvis yo',
     'footer.company.title': 'Konpayi',
     'footer.support.title': 'Sipò',
-    'footer.rights': '2024 Theo Network. Tout dwa yo rezève.',
+    'footer.rights': '2024 Theonetwork. Tout dwa yo rezève.',
   },
   fr: {
     // Navigation
@@ -157,14 +157,14 @@ const translations = {
     'services.consulting.desc': 'Guidance experte pour optimiser votre stratégie et opérations technologiques',
     
     // About
-    'about.title': 'À Propos de Theo Network',
+    'about.title': 'À Propos de Theonetwork',
     'about.subtitle': 'Menant l\'avenir de la transformation digitale',
     'about.mission.title': 'Notre Mission',
     'about.mission.desc': 'Autonomiser les entreprises avec des solutions technologiques innovantes qui stimulent la croissance et l\'efficacité.',
     'about.owner.title': 'Rencontrez Notre Fondateur',
     'about.owner.name': 'Theshneider Avril',
     'about.owner.role': 'Fondateur et PDG',
-    'about.owner.bio': 'Avec des années d\'expérience en conseil technologique et développement, Theshneider dirige Theo Network avec une vision pour transformer la façon dont les entreprises exploitent la technologie.',
+    'about.owner.bio': 'Avec des années d\'expérience en conseil technologique et développement, Theshneider dirige Theonetwork avec une vision pour transformer la façon dont les entreprises exploitent la technologie.',
     
     // Contact
     'contact.title': 'Contactez-Nous',
@@ -183,7 +183,7 @@ const translations = {
     'footer.services.title': 'Services',
     'footer.company.title': 'Entreprise',
     'footer.support.title': 'Support',
-    'footer.rights': '2024 Theo Network. Tous droits réservés.',
+    'footer.rights': '2024 Theonetwork. Tous droits réservés.',
   },
 };
 

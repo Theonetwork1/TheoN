@@ -37,7 +37,7 @@ const FAQ = () => {
       category: "General Questions",
       questions: [
         {
-          question: "What services does Theo Network offer?",
+          question: "What services does Theonetwork offer?",
           answer: "We specialize in app development, website creation, system automation, and strategic consulting. Our team creates custom mobile and web applications, professional websites, automated business processes, and provides expert technology guidance to help businesses grow."
         },
         {
@@ -49,7 +49,7 @@ const FAQ = () => {
           answer: "Yes! We work with startups, small businesses, and large enterprises. Our solutions are scalable and tailored to meet the specific needs and budget of each client, regardless of company size."
         },
         {
-          question: "What makes Theo Network different from other tech companies?",
+          question: "What makes Theonetwork different from other tech companies?",
           answer: "We combine technical expertise with personalized service, offering multilingual support and focusing on long-term partnerships. Our founder, Theshneider Avril, brings years of experience and ensures every project receives personal attention and innovative solutions."
         }
       ]
@@ -241,7 +241,7 @@ const FAQ = () => {
             Book your free consultation today and let's discuss your project
           </p>
           <a
-            href="https://wa.me/+17745069615?text=Hi! I'd like to book a free consultation with Theo Network."
+            href="https://wa.me/+17745069615?text=Hi! I'd like to book a free consultation with Theonetwork."
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 btn-animate"
