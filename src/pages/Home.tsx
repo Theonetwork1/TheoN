@@ -348,7 +348,7 @@ const Home = () => {
       </section>
 
       {/* Banner Image Section with CTA */}
-      <div className="relative w-full banner-section" style={{ margin: 0, padding: 0, marginBottom: '4rem' }}>
+      <div className="relative w-full banner-section px-4 py-10" style={{ marginBottom: '4rem' }}>
         <img
           src="/theonetworkbanner.jpg"
           alt="Theonetwork Banner"
@@ -362,11 +362,11 @@ const Home = () => {
         {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-slate-900/30 to-slate-900/60"></div>
         
-        {/* Text Block and CTA Button - Aligned with laptop on the right */}
-        <div className="absolute inset-0 flex items-center justify-end pr-4 sm:pr-6 md:pr-8 lg:pr-12 xl:pr-16">
-          <div className="text-center max-w-sm lg:max-w-md">
-            {/* Two-line heading - perfectly centered */}
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8 leading-tight">
+        {/* Text Block and CTA Button - Responsive positioning */}
+        <div className="absolute inset-0 flex items-center justify-end px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+          <div className="text-center max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
+            {/* Two-line heading - responsive sizing */}
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 md:mb-8 leading-tight">
               <div className="bg-gradient-to-r from-white via-orange-100 to-orange-200 bg-clip-text text-transparent">
                 Build Smarter with
               </div>
@@ -375,21 +375,21 @@ const Home = () => {
               </div>
             </h2>
             
-            {/* Paragraph with controlled wrapping - centered */}
-            <p className="text-lg md:text-xl text-orange-100 mb-8 leading-relaxed max-w-xs mx-auto">
+            {/* Paragraph with responsive sizing and controlled wrapping */}
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-orange-100 mb-4 sm:mb-6 md:mb-8 leading-relaxed max-w-xs sm:max-w-sm mx-auto">
               Professional digital solutions to bring your ideas to life
             </p>
             
-            {/* CTA Button - centered */}
+            {/* CTA Button - centered with responsive sizing */}
             <div className="flex justify-center">
               <a
                 href="https://wa.me/+17745069615?text=Hi! I'm interested in your services."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-lg rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25"
+                className="group inline-flex items-center px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-sm sm:text-base md:text-lg rounded-lg sm:rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25"
               >
                 Get Started Today
-                <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                <ArrowRight className="ml-2 sm:ml-3 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </a>
             </div>
           </div>
