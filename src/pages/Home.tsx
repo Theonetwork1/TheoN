@@ -213,7 +213,8 @@ const Home = () => {
             loop
             playsInline
             muted={isVideoMuted}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover hero-video"
+            style={{ objectPosition: 'center center' }}
             onError={(e) => {
               console.log('Video failed to load:', e);
               e.currentTarget.style.display = 'none';
@@ -244,40 +245,40 @@ const Home = () => {
         </div>
 
         {/* Main Content - Responsive and centered */}
-        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 hero-content" style={{ paddingTop: '60vh' }}>
           <div className="max-w-7xl mx-auto">
             <div className="max-w-[90%] sm:max-w-3xl mx-auto animate-on-scroll">
               {/* Heading - responsive sizing */}
-              <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold sm:font-bold text-white mb-3 sm:mb-6 md:mb-8 leading-tight animate-fade-in text-center">
+              <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold sm:font-bold text-white mb-6 sm:mb-6 md:mb-8 leading-tight animate-fade-in text-center hero-title">
                 <span className="bg-gradient-to-r from-white via-orange-100 to-orange-200 bg-clip-text text-transparent">
                   Digital Innovation
                 </span>
               </h1>
               
               {/* Subheading - responsive sizing with better spacing */}
-              <p className="text-sm sm:text-lg md:text-xl lg:text-2xl text-orange-100 mb-4 sm:mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in animate-delay-200 text-center px-2">
+              <p className="text-lg sm:text-lg md:text-xl lg:text-2xl text-orange-100 mb-8 sm:mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in animate-delay-200 text-center px-2 hero-subtitle">
                 Transform your business with cutting-edge technology solutions. We build the future, today.
               </p>
               
               {/* CTA Buttons - responsive and stacked on mobile */}
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 justify-center animate-fade-in animate-delay-300">
+              <div className="flex flex-col sm:flex-row gap-6 sm:gap-6 justify-center animate-fade-in animate-delay-300 hero-buttons">
                 <a
                   href="https://wa.me/+17745069615?text=Hi! I'd like to discuss a digital transformation project."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center justify-center px-3 sm:px-8 md:px-12 py-1.5 sm:py-4 md:py-6 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-semibold sm:font-bold text-xs sm:text-base md:text-lg lg:text-xl rounded-md sm:rounded-xl md:rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 btn-animate"
+                  className="group inline-flex items-center justify-center px-6 sm:px-8 md:px-12 py-4 sm:py-4 md:py-6 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-semibold sm:font-bold text-base sm:text-base md:text-lg lg:text-xl rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 btn-animate hero-button"
                   onClick={handleVideoInteraction}
                 >
                   Start Your Digital Journey
-                  <ArrowRight className="ml-1.5 sm:ml-3 w-3 h-3 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRight className="ml-3 sm:ml-3 w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
                 <Link
                   to="/services"
-                  className="group inline-flex items-center justify-center px-3 sm:px-8 md:px-12 py-1.5 sm:py-4 md:py-6 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-semibold sm:font-bold text-xs sm:text-base md:text-lg lg:text-xl rounded-md sm:rounded-xl md:rounded-2xl border border-white/20 transition-all duration-300 transform hover:scale-105 hover-lift"
+                  className="group inline-flex items-center justify-center px-6 sm:px-8 md:px-12 py-4 sm:py-4 md:py-6 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-semibold sm:font-bold text-base sm:text-base md:text-lg lg:text-xl rounded-lg sm:rounded-xl md:rounded-2xl border border-white/20 transition-all duration-300 transform hover:scale-105 hover-lift hero-button"
                   onClick={handleVideoInteraction}
                 >
                   Explore Solutions
-                  <ArrowRight className="ml-1.5 sm:ml-3 w-3 h-3 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRight className="ml-3 sm:ml-3 w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </div>
             </div>
