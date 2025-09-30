@@ -312,37 +312,43 @@ video {
 
 /* Mobile hero section adjustments for screens smaller than 768px */
 @media (max-width: 767px) {
-  /* Ensure video is centered on mobile */
+  /* Center the person's face in the video */
   .hero-video {
-    object-position: center center !important;
+    object-position: center 30% !important;
   }
   
-  /* Move content down to avoid face overlap */
+  /* Move content much lower to avoid face overlap */
   .hero-content {
-    padding-top: 60vh !important;
+    padding-top: 70vh !important;
+    display: flex !important;
+    align-items: flex-end !important;
   }
   
   /* Increase font sizes for mobile readability */
   .hero-title {
-    font-size: 2.5rem !important;
+    font-size: 2rem !important;
     margin-bottom: 1.5rem !important;
   }
   
   .hero-subtitle {
-    font-size: 1.125rem !important;
+    font-size: 1rem !important;
     margin-bottom: 2rem !important;
   }
   
   /* Stack buttons vertically with spacing */
   .hero-buttons {
     flex-direction: column !important;
-    gap: 1.5rem !important;
+    gap: 1rem !important;
   }
   
+  /* Match button size with second banner section */
   .hero-button {
-    padding: 1rem 1.5rem !important;
-    font-size: 1rem !important;
-    border-radius: 0.5rem !important;
+    padding: 1.25rem 2rem !important;
+    font-size: 1.125rem !important;
+    border-radius: 0.75rem !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
   }
 }
 
