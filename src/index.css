@@ -345,3 +345,27 @@ video {
     border-radius: 0.5rem !important;
   }
 }
+
+/* Mobile banner section adjustments for screens smaller than 768px */
+@media (max-width: 767px) {
+  /* Center content vertically and horizontally on mobile */
+  .banner-content {
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  
+  /* Hide subtitle on mobile */
+  .banner-subtitle {
+    display: none !important;
+  }
+  
+  /* Adjust title spacing for mobile */
+  .banner-title {
+    margin-bottom: 2rem !important;
+  }
+  
+  /* Ensure proper spacing between title and button */
+  .banner-button-container {
+    margin-top: 0 !important;
+  }
+}

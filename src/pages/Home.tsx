@@ -366,10 +366,10 @@ const Home = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-slate-900/30 to-slate-900/60"></div>
         
         {/* Text Block and CTA Button - Responsive positioning */}
-        <div className="absolute inset-0 flex items-center justify-end px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
+        <div className="absolute inset-0 flex items-center justify-end px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 banner-content">
           <div className="text-center max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
             {/* Two-line heading - responsive sizing */}
-            <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-6 md:mb-8 leading-tight">
+            <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-6 md:mb-8 leading-tight banner-title">
               <div className="bg-gradient-to-r from-white via-orange-100 to-orange-200 bg-clip-text text-transparent">
                 Build Smarter with
               </div>
@@ -379,17 +379,17 @@ const Home = () => {
             </h2>
             
             {/* Paragraph with responsive sizing and controlled wrapping */}
-            <p className="text-xs sm:text-base md:text-lg lg:text-xl text-orange-100 mb-3 sm:mb-6 md:mb-8 leading-relaxed max-w-xs sm:max-w-sm mx-auto">
+            <p className="text-xs sm:text-base md:text-lg lg:text-xl text-orange-100 mb-3 sm:mb-6 md:mb-8 leading-relaxed max-w-xs sm:max-w-sm mx-auto banner-subtitle">
               Professional digital solutions to bring your ideas to life
             </p>
             
             {/* CTA Button - centered with responsive sizing */}
-            <div className="flex justify-center">
+            <div className="flex justify-center banner-button-container">
               <a
                 href="https://wa.me/+17745069615?text=Hi! I'm interested in your services."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center px-3 sm:px-6 md:px-8 py-1.5 sm:py-3 md:py-4 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-xs sm:text-base md:text-lg rounded-md sm:rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25"
+                className="group inline-flex items-center px-3 sm:px-6 md:px-8 py-1.5 sm:py-3 md:py-4 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-xs sm:text-base md:text-lg rounded-md sm:rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 banner-button"
               >
                 Get Started Today
                 <ArrowRight className="ml-1.5 sm:ml-3 w-3 h-3 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
