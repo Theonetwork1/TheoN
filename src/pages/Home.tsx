@@ -245,7 +245,7 @@ const Home = () => {
         </div>
 
         {/* Main Content - Responsive and centered */}
-        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 hero-content" style={{ paddingTop: '60vh' }}>
+        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 hero-content">
           <div className="max-w-7xl mx-auto">
             <div className="max-w-[90%] sm:max-w-3xl mx-auto animate-on-scroll">
               {/* Heading - responsive sizing */}

@@ -310,6 +310,13 @@ video {
   }
 }
 
+/* Desktop hero content - centered vertically */
+.hero-content {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+}
+
 /* Mobile hero section adjustments for screens smaller than 768px */
 @media (max-width: 767px) {
   /* Center the person's face in the video */
@@ -320,8 +327,8 @@ video {
   /* Move content much lower to avoid face overlap */
   .hero-content {
     padding-top: 70vh !important;
-    display: flex !important;
     align-items: flex-end !important;
+    min-height: auto !important;
   }
   
   /* Increase font sizes for mobile readability */
