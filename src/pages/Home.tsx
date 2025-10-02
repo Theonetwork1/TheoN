@@ -228,7 +228,7 @@ const Home = () => {
               e.currentTarget.play().catch(console.log);
             }}
           >
-            <source src="/theonetworkvideo.mp4" type="video/mp4" />
+            <source src="/hero_banner_video_theo.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           {/* Overlay for better text readability - positioned to not cover face */}
