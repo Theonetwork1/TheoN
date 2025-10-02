@@ -25,8 +25,12 @@ const Home = () => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       setIsMobile(mobile);
-      // Keep sound enabled
-      setIsVideoMuted(false);
+      // Mobile needs to be muted for autoplay, desktop can have sound
+      if (mobile) {
+        setIsVideoMuted(true);
+      } else {
+        setIsVideoMuted(false);
+      }
     };
     
     checkMobile();
@@ -137,6 +141,30 @@ const Home = () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
     };
   }, [isVideoMuted]);
+
+  // Handle video click to toggle sound on mobile
+  const handleVideoClick = () => {
+    const video = videoRef.current;
+    if (video && isMobile) {
+      console.log('Click detected on mobile, current muted state:', video.muted);
+      
+      // Toggle mute
+      const newMutedState = !video.muted;
+      video.muted = newMutedState;
+      setIsVideoMuted(newMutedState);
+      
+      console.log('New muted state:', newMutedState);
+      
+      // Force play after unmuting
+      if (!newMutedState) {
+        video.play().then(() => {
+          console.log('Video playing with sound');
+        }).catch(err => {
+          console.error('Failed to play with sound:', err);
+        });
+      }
+    }
+  };
 
   // Handle scroll to play/pause video based on hero section visibility
   useEffect(() => {
@@ -290,7 +318,7 @@ const Home = () => {
       {/* Main Hero Banner - Technology/Digital Focused */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" style={{ marginBottom: 0 }}>
         {/* Background Video - Full Screen */}
-        <div className="absolute inset-0 video-banner">
+        <div className="absolute inset-0 video-banner" onClick={handleVideoClick}>
           <video
             ref={videoRef}
             autoPlay
@@ -353,6 +381,15 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-slate-800/30 to-transparent" style={{ zIndex: 3 }}></div>
           {/* Additional overlay for mobile text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-transparent" style={{ zIndex: 3 }}></div>
+          
+          {/* Mobile sound indicator */}
+          {isMobile && (
+            <div className="absolute top-4 left-4" style={{ zIndex: 4 }}>
+              <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm">
+                {isVideoMuted ? 'Tap to enable sound' : 'Sound enabled'}
+              </div>
+            </div>
+          )}
           
         </div>
 
