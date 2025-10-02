@@ -151,6 +151,10 @@ const Home = () => {
       
       // Toggle mute state
       if (isVideoMuted) {
+        // First pause the video
+        video.pause();
+        
+        // Then unmute and play
         video.muted = false;
         setIsVideoMuted(false);
         console.log('Video unmuted - attempting to play with sound');
@@ -162,6 +166,7 @@ const Home = () => {
           console.log('Video play with sound failed:', error);
           // If play fails, try muted play
           video.muted = true;
+          setIsVideoMuted(true);
           video.play().catch(console.log);
         });
       } else {
@@ -389,6 +394,19 @@ const Home = () => {
           {/* Additional overlay for mobile text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-transparent" style={{ zIndex: 3 }}></div>
           
+          {/* Mobile interaction overlay */}
+          {isMobile && !userInteracted && (
+            <div 
+              className="absolute inset-0 bg-black/20 flex items-center justify-center" 
+              style={{ zIndex: 5 }}
+              onClick={handleVideoInteraction}
+            >
+              <div className="bg-orange-600 text-white px-6 py-4 rounded-lg text-lg font-bold cursor-pointer hover:bg-orange-700 transition-colors shadow-xl">
+                🔊 Tap to enable sound
+              </div>
+            </div>
+          )}
+          
           {/* Video controls - minimal for mobile sound activation */}
           <div className="absolute top-4 right-4" style={{ zIndex: 4 }}>
             {videoError && (
@@ -397,11 +415,18 @@ const Home = () => {
               </div>
             )}
             {isMobile && (
-              <div 
-                className="bg-orange-600/80 text-white px-4 py-3 rounded-lg text-sm font-semibold cursor-pointer hover:bg-orange-700/80 transition-colors shadow-lg"
-                onClick={handleVideoInteraction}
-              >
-                {isVideoMuted ? '🔊 Tap anywhere for sound' : '🔇 Sound on'}
+              <div className="flex flex-col gap-2">
+                <div 
+                  className="bg-orange-600/90 text-white px-4 py-3 rounded-lg text-sm font-semibold cursor-pointer hover:bg-orange-700/90 transition-colors shadow-lg"
+                  onClick={handleVideoInteraction}
+                >
+                  {isVideoMuted ? '🔊 Tap anywhere for sound' : '🔇 Sound on'}
+                </div>
+                {!userInteracted && (
+                  <div className="bg-blue-600/90 text-white px-3 py-2 rounded-lg text-xs text-center">
+                    Tap video to enable sound
+                  </div>
+                )}
               </div>
             )}
           </div>
