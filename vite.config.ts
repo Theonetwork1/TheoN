@@ -12,5 +12,13 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: false,
+    headers: {
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+    },
+  },
+  assetsInclude: ['**/*.mp4', '**/*.webm', '**/*.ogg'],
+  build: {
+    assetsInlineLimit: 0,
   },
 });

@@ -47,6 +47,13 @@ const Home = () => {
 
     const attemptPlay = async () => {
       try {
+        console.log('Attempting to play video...', {
+          muted: isVideoMuted,
+          readyState: video.readyState,
+          src: video.src,
+          currentSrc: video.currentSrc
+        });
+        
         video.muted = isVideoMuted;
         video.playsInline = true;
         
@@ -59,42 +66,68 @@ const Home = () => {
         playAttempts++;
         
         if (playAttempts < maxAttempts) {
+          console.log(`Retrying video play in ${1000 * playAttempts}ms (attempt ${playAttempts}/${maxAttempts})`);
           setTimeout(attemptPlay, 1000 * playAttempts);
         } else {
-          console.log('Max play attempts reached');
+          console.log('Max play attempts reached, showing error');
           setVideoError(true);
         }
       }
     };
 
     const handleCanPlay = () => {
+      console.log('Video can play event fired');
       attemptPlay();
     };
 
     const handleLoadedData = () => {
+      console.log('Video loaded data event fired');
       attemptPlay();
     };
 
-    const handleError = () => {
-      console.log('Video error occurred');
+    const handleError = (e: Event) => {
+      console.error('Video error occurred:', e);
+      console.error('Video error details:', {
+        error: video.error,
+        networkState: video.networkState,
+        readyState: video.readyState,
+        src: video.src,
+        currentSrc: video.currentSrc
+      });
       setVideoError(true);
       setVideoLoaded(false);
+    };
+
+    const handleLoadStart = () => {
+      console.log('Video load start event fired');
+      setVideoError(false);
+    };
+
+    const handleLoadedMetadata = () => {
+      console.log('Video metadata loaded');
     };
 
     // Add event listeners
     video.addEventListener('canplay', handleCanPlay);
     video.addEventListener('loadeddata', handleLoadedData);
     video.addEventListener('error', handleError);
+    video.addEventListener('loadstart', handleLoadStart);
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
 
     // Try to play immediately if video is ready
     if (video.readyState >= 3) {
+      console.log('Video already ready, attempting play');
       attemptPlay();
+    } else {
+      console.log('Video not ready yet, waiting for events');
     }
 
     return () => {
       video.removeEventListener('canplay', handleCanPlay);
       video.removeEventListener('loadeddata', handleLoadedData);
       video.removeEventListener('error', handleError);
+      video.removeEventListener('loadstart', handleLoadStart);
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
     };
   }, [isVideoMuted]);
 
@@ -289,7 +322,15 @@ const Home = () => {
           {/* Fallback background - only show if video fails to load */}
           {videoError && (
             <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ zIndex: 1 }}>
-              <div className="absolute inset-0 bg-black/20"></div>
+              <div 
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{ 
+                  backgroundImage: 'url(/theonetworkbanner.jpg)',
+                  backgroundPosition: 'center center'
+                }}
+              >
+                <div className="absolute inset-0 bg-black/40"></div>
+              </div>
             </div>
           )}
           
