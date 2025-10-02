@@ -1,4 +1,4 @@
-ï»¿import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Smartphone, Globe, Cog, TrendingUp, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -11,7 +11,7 @@ const Home = () => {
   const testimonialsRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   
-  // Ã‰tat pour les animations interactives
+  // État pour les animations interactives
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
@@ -198,7 +198,7 @@ const Home = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Afficher le popup email aprÃ¨s 10 secondes
+  // Afficher le popup email après 10 secondes
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowEmailPopup(true);
@@ -207,7 +207,7 @@ const Home = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Auto-rotation des tÃ©moignages
+  // Auto-rotation des témoignages
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTestimonial((prev) => (prev + 1) % 6);
@@ -243,13 +243,13 @@ const Home = () => {
     {
       name: 'Jean-Baptiste Pierre',
       nationality: 'Haitian',
-      content: 'Theonetwork a transformÃ© complÃ¨tement notre prÃ©sence numÃ©rique. Leur expertise en dÃ©veloppement d\'applications et automatisation de systÃ¨mes nous a fait Ã©conomiser des mois de travail.',
+      content: 'Theonetwork a transformé complètement notre présence numérique. Leur expertise en développement d\'applications et automatisation de systèmes nous a fait économiser des mois de travail.',
       rating: 5,
     },
     {
-      name: 'Marie-Claire FranÃ§ois',
+      name: 'Marie-Claire François',
       nationality: 'Haitian',
-      content: 'Service professionnel, fiable et innovant. L\'Ã©quipe a livrÃ© exactement ce dont nous avions besoin et a dÃ©passÃ© nos attentes.',
+      content: 'Service professionnel, fiable et innovant. L\'équipe a livré exactement ce dont nous avions besoin et a dépassé nos attentes.',
       rating: 5,
     },
     {
@@ -290,7 +290,7 @@ const Home = () => {
       {/* Main Hero Banner - Technology/Digital Focused */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" style={{ marginBottom: 0 }}>
         {/* Background Video - Full Screen */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 video-banner">
           <video
             ref={videoRef}
             autoPlay
@@ -299,7 +299,7 @@ const Home = () => {
             muted={isVideoMuted}
             preload="auto"
             webkit-playsinline="true"
-            className="absolute inset-0 w-full h-full object-cover hero-video"
+            className="absolute inset-0 w-full h-full object-cover hero-video video-banner-video"
             style={{ 
               objectPosition: 'center center', // Centered both horizontally and vertically
               width: '100%',
@@ -358,7 +358,7 @@ const Home = () => {
           {videoError && (
             <div className="absolute top-4 right-4" style={{ zIndex: 4 }}>
               <div className="bg-red-500/50 text-white px-3 py-2 rounded-lg text-sm">
-                Ã¢Å¡Â Ã¯Â¸Â Video failed
+                Video failed
               </div>
             </div>
           )}
@@ -628,10 +628,10 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {[
-              { step: '01', title: 'Discovery', description: 'We analyze your needs and define project requirements', icon: 'ğŸ”', color: 'from-blue-500 to-blue-600' },
-              { step: '02', title: 'Planning', description: 'Create detailed roadmap and timeline for your project', icon: 'ğŸ“‹', color: 'from-green-500 to-green-600' },
-              { step: '03', title: 'Development', description: 'Build your solution using best practices and latest tech', icon: 'âš¡', color: 'from-orange-500 to-orange-600' },
-              { step: '04', title: 'Launch', description: 'Deploy, test, and provide ongoing support and maintenance', icon: 'ğŸš€', color: 'from-purple-500 to-purple-600' },
+              { step: '01', title: 'Discovery', description: 'We analyze your needs and define project requirements', icon: '??', color: 'from-blue-500 to-blue-600' },
+              { step: '02', title: 'Planning', description: 'Create detailed roadmap and timeline for your project', icon: '??', color: 'from-green-500 to-green-600' },
+              { step: '03', title: 'Development', description: 'Build your solution using best practices and latest tech', icon: '?', color: 'from-orange-500 to-orange-600' },
+              { step: '04', title: 'Launch', description: 'Deploy, test, and provide ongoing support and maintenance', icon: '??', color: 'from-purple-500 to-purple-600' },
             ].map((process, index) => (
               <div 
                 key={index} 
