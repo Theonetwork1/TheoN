@@ -25,8 +25,11 @@ const Home = () => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       setIsMobile(mobile);
-      // Always start muted for autoplay compatibility, user can unmute
-      setIsVideoMuted(true);
+      if (mobile) {
+        setIsVideoMuted(true); // Mute on mobile only for autoplay compatibility
+      } else {
+        setIsVideoMuted(false); // Keep desktop with sound as it was working
+      }
     };
     
     checkMobile();
