@@ -14,17 +14,21 @@ const Home = () => {
   // État pour les animations interactives
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [isVideoMuted, setIsVideoMuted] = useState(false);
+  const [isVideoMuted, setIsVideoMuted] = useState(true);
   const [showEmailPopup, setShowEmailPopup] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
-  // Detect mobile device
+  // Detect mobile device and set initial video state
   useEffect(() => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       setIsMobile(mobile);
       if (mobile) {
         setIsVideoMuted(true); // Mute on mobile by default
+      } else {
+        setIsVideoMuted(false); // Unmute on desktop by default
       }
     };
     
@@ -32,6 +36,87 @@ const Home = () => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Video management - completely refactored
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    let playAttempts = 0;
+    const maxAttempts = 3;
+
+    const attemptPlay = async () => {
+      try {
+        video.muted = isVideoMuted;
+        video.playsInline = true;
+        
+        await video.play();
+        console.log('Video playing successfully');
+        setVideoLoaded(true);
+        setVideoError(false);
+      } catch (error) {
+        console.log('Video play failed:', error);
+        playAttempts++;
+        
+        if (playAttempts < maxAttempts) {
+          setTimeout(attemptPlay, 1000 * playAttempts);
+        } else {
+          console.log('Max play attempts reached');
+          setVideoError(true);
+        }
+      }
+    };
+
+    const handleCanPlay = () => {
+      attemptPlay();
+    };
+
+    const handleLoadedData = () => {
+      attemptPlay();
+    };
+
+    const handleError = () => {
+      console.log('Video error occurred');
+      setVideoError(true);
+      setVideoLoaded(false);
+    };
+
+    // Add event listeners
+    video.addEventListener('canplay', handleCanPlay);
+    video.addEventListener('loadeddata', handleLoadedData);
+    video.addEventListener('error', handleError);
+
+    // Try to play immediately if video is ready
+    if (video.readyState >= 3) {
+      attemptPlay();
+    }
+
+    return () => {
+      video.removeEventListener('canplay', handleCanPlay);
+      video.removeEventListener('loadeddata', handleLoadedData);
+      video.removeEventListener('error', handleError);
+    };
+  }, [isVideoMuted]);
+
+  // Handle user interaction
+  const handleVideoInteraction = () => {
+    const video = videoRef.current;
+    if (video) {
+      // Force play
+      video.play().catch(console.log);
+      
+      // Toggle mute
+      if (isVideoMuted) {
+        video.muted = false;
+        setIsVideoMuted(false);
+        console.log('Video unmuted');
+      } else {
+        video.muted = true;
+        setIsVideoMuted(true);
+        console.log('Video muted');
+      }
+    }
+  };
 
   useEffect(() => {
     const observerOptions = {
@@ -83,95 +168,6 @@ const Home = () => {
 
     return () => clearInterval(interval);
   }, []);
-
-  // Force video play - simplified approach
-  useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      const playVideo = async () => {
-        try {
-          // Set video properties
-          video.muted = isVideoMuted;
-          video.playsInline = true;
-          
-          await video.play();
-          console.log('Video playing successfully');
-        } catch (error) {
-          console.log('Video play failed:', error);
-          // Try again after a short delay
-          setTimeout(() => {
-            video.muted = isVideoMuted;
-            video.playsInline = true;
-            video.play().catch(console.log);
-          }, 1000);
-        }
-      };
-      
-      // Try to play when video is ready
-      const handleCanPlay = () => {
-        playVideo();
-      };
-      
-      video.addEventListener('canplay', handleCanPlay);
-      
-      // Also try when metadata is loaded
-      const handleLoadedMetadata = () => {
-        playVideo();
-      };
-      
-      video.addEventListener('loadedmetadata', handleLoadedMetadata);
-      
-      return () => {
-        video.removeEventListener('canplay', handleCanPlay);
-        video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      };
-    }
-  }, [isVideoMuted]);
-
-  // Handle user interaction to unmute video
-  const handleVideoInteraction = () => {
-    const video = videoRef.current;
-    if (video) {
-      // Force play on mobile when user interacts
-      video.play().catch((error) => {
-        console.log('Video play failed on interaction:', error);
-      });
-      
-      if (isVideoMuted) {
-        video.muted = false;
-        setIsVideoMuted(false);
-        console.log('Video unmuted');
-      }
-    }
-  };
-
-  // Handle scroll to mute/unmute video based on hero section visibility
-  useEffect(() => {
-    const handleScroll = () => {
-      const video = videoRef.current;
-      const heroSection = heroRef.current;
-      
-      if (video && heroSection) {
-        const heroRect = heroSection.getBoundingClientRect();
-        const isHeroVisible = heroRect.bottom > 0 && heroRect.top < window.innerHeight;
-        
-        if (!isHeroVisible && !isVideoMuted) {
-          // Mute when leaving hero section
-          video.muted = true;
-          setIsVideoMuted(true);
-          console.log('Video muted due to scroll');
-        } else if (isHeroVisible && isVideoMuted) {
-          // Unmute when returning to hero section (if user had previously interacted)
-          video.muted = false;
-          setIsVideoMuted(false);
-          console.log('Video unmuted due to scroll back to hero');
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isVideoMuted]);
 
   const services = [
     {
@@ -254,7 +250,7 @@ const Home = () => {
             loop
             playsInline
             muted={isVideoMuted}
-            preload="metadata"
+            preload="auto"
             webkit-playsinline="true"
             className="absolute inset-0 w-full h-full object-cover hero-video"
             style={{ 
@@ -262,72 +258,59 @@ const Home = () => {
               width: '100%',
               height: '100%',
               minHeight: '100vh',
-              zIndex: 1
+              zIndex: 2
             }}
             onError={(e) => {
               console.log('Video failed to load:', e);
-              // Show a subtle background color instead of hiding
-              e.currentTarget.style.backgroundColor = '#1e293b';
+              setVideoError(true);
+              setVideoLoaded(false);
             }}
             onLoadedData={(e) => {
               console.log('Video loaded successfully');
-              const video = e.currentTarget;
-              video.muted = isVideoMuted;
-              video.playsInline = true;
-              video.play().catch((error) => {
-                console.log('Video play failed on load:', error);
-                // Try again after user interaction
-                setTimeout(() => {
-                  video.muted = isVideoMuted;
-                  video.playsInline = true;
-                  video.play().catch(console.log);
-                }, 1000);
-              });
+              setVideoLoaded(true);
+              setVideoError(false);
             }}
             onCanPlay={(e) => {
               console.log('Video can play');
-              const video = e.currentTarget;
-              video.muted = isVideoMuted;
-              video.playsInline = true;
-              video.play().catch((error) => {
-                console.log('Video play failed on canplay:', error);
-              });
+              setVideoLoaded(true);
+              setVideoError(false);
             }}
             onLoadStart={() => {
               console.log('Video load started');
             }}
             onLoadedMetadata={() => {
               console.log('Video metadata loaded');
-              const video = videoRef.current;
-              if (video) {
-                video.muted = isVideoMuted;
-                video.playsInline = true;
-                video.play().catch(console.log);
-              }
             }}
           >
             <source src="/hero_banner_video_theo.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           
-          {/* Fallback background for mobile if video doesn't load */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ zIndex: 0 }}>
-            <div className="absolute inset-0 bg-black/20"></div>
-          </div>
+          {/* Fallback background - only show if video fails to load */}
+          {videoError && (
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ zIndex: 1 }}>
+              <div className="absolute inset-0 bg-black/20"></div>
+            </div>
+          )}
           
-          {/* Overlay for better text readability - positioned to not cover face */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-slate-800/30 to-transparent"></div>
+          {/* Overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-slate-800/30 to-transparent" style={{ zIndex: 3 }}></div>
           {/* Additional overlay for mobile text readability */}
-          <div className="absolute inset-0 bg-black/30 sm:bg-transparent"></div>
+          <div className="absolute inset-0 bg-black/30 sm:bg-transparent" style={{ zIndex: 3 }}></div>
           
           {/* Video controls */}
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-4 right-4" style={{ zIndex: 4 }}>
             <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
               {isVideoMuted ? '🔊 Click to unmute' : '🔇 Click to mute'}
             </div>
             {isMobile && (
               <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm mt-2">
                 📱 Tap to play video
+              </div>
+            )}
+            {videoError && (
+              <div className="bg-red-500/50 text-white px-3 py-2 rounded-lg text-sm mt-2">
+                ⚠️ Video failed to load
               </div>
             )}
           </div>
