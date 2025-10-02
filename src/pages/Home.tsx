@@ -301,7 +301,7 @@ const Home = () => {
             webkit-playsinline="true"
             className="absolute inset-0 w-full h-full object-cover hero-video"
             style={{ 
-              objectPosition: 'center center',
+              objectPosition: 'center 30%',
               width: '100%',
               height: '100%',
               minHeight: '100vh',
@@ -719,3 +719,4 @@ const Home = () => {
 };
 
 export default Home;
+
