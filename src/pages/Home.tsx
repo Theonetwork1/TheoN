@@ -78,6 +78,9 @@ const Home = () => {
           video.muted = true;
           video.playsInline = true;
           
+          // Force load the video
+          video.load();
+          
           await video.play();
           console.log('Video playing successfully');
         } catch (error) {
@@ -85,8 +88,9 @@ const Home = () => {
           // Try again after a short delay
           setTimeout(() => {
             video.muted = true;
+            video.playsInline = true;
             video.play().catch(console.log);
-          }, 1000);
+          }, 2000);
         }
       };
       
@@ -110,9 +114,18 @@ const Home = () => {
         
         video.addEventListener('loadedmetadata', handleLoadedMetadata);
         
+        // Try to play when data is loaded
+        const handleLoadedData = () => {
+          playVideo();
+          video.removeEventListener('loadeddata', handleLoadedData);
+        };
+        
+        video.addEventListener('loadeddata', handleLoadedData);
+        
         return () => {
           video.removeEventListener('canplay', handleCanPlay);
           video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+          video.removeEventListener('loadeddata', handleLoadedData);
         };
       }
     }
@@ -251,7 +264,8 @@ const Home = () => {
               objectPosition: 'center center',
               width: '100%',
               height: '100%',
-              minHeight: '100vh'
+              minHeight: '100vh',
+              zIndex: 1
             }}
             onError={(e) => {
               console.log('Video failed to load:', e);
@@ -262,10 +276,13 @@ const Home = () => {
               console.log('Video loaded successfully');
               const video = e.currentTarget;
               video.muted = true;
+              video.playsInline = true;
               video.play().catch((error) => {
                 console.log('Video play failed on load:', error);
                 // Try again after user interaction
                 setTimeout(() => {
+                  video.muted = true;
+                  video.playsInline = true;
                   video.play().catch(console.log);
                 }, 1000);
               });
@@ -274,6 +291,7 @@ const Home = () => {
               console.log('Video can play');
               const video = e.currentTarget;
               video.muted = true;
+              video.playsInline = true;
               video.play().catch((error) => {
                 console.log('Video play failed on canplay:', error);
               });
@@ -281,10 +299,24 @@ const Home = () => {
             onLoadStart={() => {
               console.log('Video load started');
             }}
+            onLoadedMetadata={() => {
+              console.log('Video metadata loaded');
+              const video = videoRef.current;
+              if (video) {
+                video.muted = true;
+                video.playsInline = true;
+                video.play().catch(console.log);
+              }
+            }}
           >
             <source src="/hero_banner_video_theo.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+          
+          {/* Fallback background for mobile if video doesn't load */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 sm:hidden" style={{ zIndex: 0 }}>
+            <div className="absolute inset-0 bg-black/20"></div>
+          </div>
           
           {/* Overlay for better text readability - positioned to not cover face */}
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-slate-800/30 to-transparent"></div>
@@ -313,12 +345,12 @@ const Home = () => {
               </h1>
               
               {/* Subheading - responsive sizing with better spacing */}
-              <p className="text-lg sm:text-lg md:text-xl lg:text-2xl text-orange-100 mb-8 sm:mb-8 max-w-2xl mx-auto leading-relaxed animate-fade-in animate-delay-200 text-center px-2 hero-subtitle">
+              <p className="text-lg sm:text-lg md:text-xl lg:text-2xl text-orange-100 mb-8 sm:mb-8 md:mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in animate-delay-200 text-center px-2 hero-subtitle">
                 Transform your business with cutting-edge technology solutions. We build the future, today.
               </p>
               
-              {/* CTA Buttons - responsive and stacked on mobile */}
-              <div className="flex flex-col sm:flex-row gap-6 sm:gap-6 justify-center animate-fade-in animate-delay-300 hero-buttons">
+              {/* CTA Buttons - responsive and stacked on mobile with better spacing */}
+              <div className="flex flex-col sm:flex-row gap-6 sm:gap-6 justify-center animate-fade-in animate-delay-300 hero-buttons mb-8 sm:mb-12 md:mb-16">
                 <a
                   href="https://wa.me/+17745069615?text=Hi! I'd like to discuss a digital transformation project."
                   target="_blank"
