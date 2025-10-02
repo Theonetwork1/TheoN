@@ -161,6 +161,32 @@ const Home = () => {
     }
   };
 
+  // Handle scroll to play/pause video based on hero section visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      const video = videoRef.current;
+      const heroSection = heroRef.current;
+      
+      if (video && heroSection) {
+        const heroRect = heroSection.getBoundingClientRect();
+        const isHeroVisible = heroRect.bottom > 0 && heroRect.top < window.innerHeight;
+        
+        if (isHeroVisible) {
+          // Play video when hero section is visible
+          video.play().catch(console.log);
+          console.log('Video playing due to scroll to hero section');
+        } else {
+          // Pause video when leaving hero section
+          video.pause();
+          console.log('Video paused due to scroll away from hero section');
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   useEffect(() => {
     const observerOptions = {
       threshold: 0.1,
@@ -286,7 +312,7 @@ const Home = () => {
       {/* Main Hero Banner - Technology/Digital Focused */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" style={{ marginBottom: 0 }}>
         {/* Background Video - Full Screen */}
-        <div className="absolute inset-0" onClick={handleVideoInteraction}>
+        <div className="absolute inset-0">
           <video
             ref={videoRef}
             autoPlay
@@ -350,18 +376,10 @@ const Home = () => {
           {/* Additional overlay for mobile text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-transparent" style={{ zIndex: 3 }}></div>
           
-          {/* Video controls */}
+          {/* Video controls - hidden for cleaner look */}
           <div className="absolute top-4 right-4" style={{ zIndex: 4 }}>
-            <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
-              {isVideoMuted ? '🔊 Click to unmute' : '🔇 Click to mute'}
-            </div>
-            {isMobile && (
-              <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm mt-2">
-                📱 Tap to play video
-              </div>
-            )}
             {videoError && (
-              <div className="bg-red-500/50 text-white px-3 py-2 rounded-lg text-sm mt-2">
+              <div className="bg-red-500/50 text-white px-3 py-2 rounded-lg text-sm">
                 ⚠️ Video failed to load
               </div>
             )}
@@ -391,7 +409,6 @@ const Home = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group inline-flex items-center justify-center px-6 sm:px-8 md:px-12 py-4 sm:py-4 md:py-6 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-semibold sm:font-bold text-base sm:text-base md:text-lg lg:text-xl rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 btn-animate hero-button"
-                  onClick={handleVideoInteraction}
                 >
                   Start Your Digital Journey
                   <ArrowRight className="ml-3 sm:ml-3 w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
@@ -399,7 +416,6 @@ const Home = () => {
                 <Link
                   to="/services"
                   className="group inline-flex items-center justify-center px-6 sm:px-8 md:px-12 py-4 sm:py-4 md:py-6 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-semibold sm:font-bold text-base sm:text-base md:text-lg lg:text-xl rounded-lg sm:rounded-xl md:rounded-2xl border border-white/20 transition-all duration-300 transform hover:scale-105 hover-lift hero-button"
-                  onClick={handleVideoInteraction}
                 >
                   Explore Solutions
                   <ArrowRight className="ml-3 sm:ml-3 w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
