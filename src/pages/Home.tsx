@@ -44,6 +44,20 @@ const Home = () => {
 
     let playAttempts = 0;
     const maxAttempts = 3;
+    let currentVideoIndex = 0;
+    const videoSources = ['/hero_banner_video_theo.mp4', '/theonetworkvideo.mp4'];
+
+    const loadNextVideo = () => {
+      if (currentVideoIndex < videoSources.length) {
+        console.log(`Loading video source ${currentVideoIndex + 1}/${videoSources.length}: ${videoSources[currentVideoIndex]}`);
+        video.src = videoSources[currentVideoIndex];
+        video.load();
+        currentVideoIndex++;
+      } else {
+        console.log('All video sources failed, showing error');
+        setVideoError(true);
+      }
+    };
 
     const attemptPlay = async () => {
       try {
@@ -69,8 +83,8 @@ const Home = () => {
           console.log(`Retrying video play in ${1000 * playAttempts}ms (attempt ${playAttempts}/${maxAttempts})`);
           setTimeout(attemptPlay, 1000 * playAttempts);
         } else {
-          console.log('Max play attempts reached, showing error');
-          setVideoError(true);
+          console.log('Max play attempts reached, trying next video source');
+          loadNextVideo();
         }
       }
     };
@@ -94,8 +108,9 @@ const Home = () => {
         src: video.src,
         currentSrc: video.currentSrc
       });
-      setVideoError(true);
-      setVideoLoaded(false);
+      
+      // Try next video source
+      loadNextVideo();
     };
 
     const handleLoadStart = () => {
@@ -114,13 +129,8 @@ const Home = () => {
     video.addEventListener('loadstart', handleLoadStart);
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
 
-    // Try to play immediately if video is ready
-    if (video.readyState >= 3) {
-      console.log('Video already ready, attempting play');
-      attemptPlay();
-    } else {
-      console.log('Video not ready yet, waiting for events');
-    }
+    // Start loading the first video
+    loadNextVideo();
 
     return () => {
       video.removeEventListener('canplay', handleCanPlay);
@@ -316,6 +326,7 @@ const Home = () => {
             }}
           >
             <source src="/hero_banner_video_theo.mp4" type="video/mp4" />
+            <source src="/theonetworkvideo.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           
