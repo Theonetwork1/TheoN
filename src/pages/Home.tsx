@@ -173,6 +173,21 @@ const Home = () => {
     }
   };
 
+  // Handle touch to enable sound on mobile
+  const handleTouchStart = () => {
+    const video = videoRef.current;
+    if (video && isMobile && video.muted) {
+      console.log('Touch detected on mobile - enabling sound');
+      video.muted = false;
+      setIsVideoMuted(false);
+      video.play().then(() => {
+        console.log('Video playing with sound after touch');
+      }).catch(err => {
+        console.error('Failed to play with sound after touch:', err);
+      });
+    }
+  };
+
   // Handle scroll to play/pause video based on hero section visibility
   useEffect(() => {
     const handleScroll = () => {
@@ -325,7 +340,7 @@ const Home = () => {
       {/* Main Hero Banner - Technology/Digital Focused */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" style={{ marginBottom: 0 }}>
         {/* Background Video - Full Screen */}
-        <div className="absolute inset-0" onClick={handleVideoClick}>
+        <div className="absolute inset-0" onClick={handleVideoClick} onTouchStart={handleTouchStart}>
           <video
             ref={videoRef}
             autoPlay
