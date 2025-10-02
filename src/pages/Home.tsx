@@ -1,4 +1,4 @@
-import { useEffect, useRef, useSÉtate } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Smartphone, Globe, Cog, TrendingUp, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -12,15 +12,15 @@ const Home = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   
   // �État pour les animations interactives
-  const [mousePosition, setMousePosition] = useSÉtate({ x: 0, y: 0 });
-  const [currentTestimonial, setCurrentTestimonial] = useSÉtate(0);
-  const [isVideoMuted, setIsVideoMuted] = useSÉtate(false);
-  const [showEmailPopup, setShowEmailPopup] = useSÉtate(false);
-  const [isMobile, setIsMobile] = useSÉtate(false);
-  const [videoLoaded, setVideoLoaded] = useSÉtate(false);
-  const [videoError, setVideoError] = useSÉtate(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isVideoMuted, setIsVideoMuted] = useState(false);
+  const [showEmailPopup, setShowEmailPopup] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
-  // Detect mobile device and set initial video sÉtate
+  // Detect mobile device and set initial video state
   useEffect(() => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -60,7 +60,7 @@ const Home = () => {
       try {
         console.log('Attempting to play video...', {
           muted: isVideoMuted,
-          readySÉtate: video.readySÉtate,
+          readystate: video.readystate,
           src: video.src,
           currentSrc: video.currentSrc
         });
@@ -100,8 +100,8 @@ const Home = () => {
       console.error('Video error occurred:', e);
       console.error('Video error details:', {
         error: video.error,
-        networkSÉtate: video.networkSÉtate,
-        readySÉtate: video.readySÉtate,
+        networkstate: video.networkstate,
+        readystate: video.readystate,
         src: video.src,
         currentSrc: video.currentSrc
       });
@@ -150,7 +150,7 @@ const Home = () => {
         
         if (isHeroVisible) {
           // Play video when hero section is visible
-          video.muted = isVideoMuted; // Ensure mute sÉtate is respected
+          video.muted = isVideoMuted; // Ensure mute state is respected
           video.play().catch(console.log);
           console.log('Video playing due to scroll to hero section');
         } else {
