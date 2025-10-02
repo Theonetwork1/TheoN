@@ -14,8 +14,24 @@ const Home = () => {
   // État pour les animations interactives
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [isVideoMuted, setIsVideoMuted] = useState(true);
+  const [isVideoMuted, setIsVideoMuted] = useState(false);
   const [showEmailPopup, setShowEmailPopup] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      setIsMobile(mobile);
+      if (mobile) {
+        setIsVideoMuted(true); // Mute on mobile by default
+      }
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const observerOptions = {
@@ -68,18 +84,15 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Force video play - improved for mobile
+  // Force video play - simplified approach
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
       const playVideo = async () => {
         try {
-          // Ensure video is muted for autoplay on mobile
-          video.muted = true;
+          // Set video properties
+          video.muted = isVideoMuted;
           video.playsInline = true;
-          
-          // Force load the video
-          video.load();
           
           await video.play();
           console.log('Video playing successfully');
@@ -87,49 +100,33 @@ const Home = () => {
           console.log('Video play failed:', error);
           // Try again after a short delay
           setTimeout(() => {
-            video.muted = true;
+            video.muted = isVideoMuted;
             video.playsInline = true;
             video.play().catch(console.log);
-          }, 2000);
+          }, 1000);
         }
       };
       
-      // Try to play immediately if video is ready
-      if (video.readyState >= 3) {
+      // Try to play when video is ready
+      const handleCanPlay = () => {
         playVideo();
-      } else {
-        // Wait for video to be ready
-        const handleCanPlay = () => {
-          playVideo();
-          video.removeEventListener('canplay', handleCanPlay);
-        };
-        
-        video.addEventListener('canplay', handleCanPlay);
-        
-        // Also try to play when metadata is loaded
-        const handleLoadedMetadata = () => {
-          playVideo();
-          video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-        };
-        
-        video.addEventListener('loadedmetadata', handleLoadedMetadata);
-        
-        // Try to play when data is loaded
-        const handleLoadedData = () => {
-          playVideo();
-          video.removeEventListener('loadeddata', handleLoadedData);
-        };
-        
-        video.addEventListener('loadeddata', handleLoadedData);
-        
-        return () => {
-          video.removeEventListener('canplay', handleCanPlay);
-          video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-          video.removeEventListener('loadeddata', handleLoadedData);
-        };
-      }
+      };
+      
+      video.addEventListener('canplay', handleCanPlay);
+      
+      // Also try when metadata is loaded
+      const handleLoadedMetadata = () => {
+        playVideo();
+      };
+      
+      video.addEventListener('loadedmetadata', handleLoadedMetadata);
+      
+      return () => {
+        video.removeEventListener('canplay', handleCanPlay);
+        video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      };
     }
-  }, []);
+  }, [isVideoMuted]);
 
   // Handle user interaction to unmute video
   const handleVideoInteraction = () => {
@@ -256,8 +253,8 @@ const Home = () => {
             autoPlay
             loop
             playsInline
-            muted={true}
-            preload="auto"
+            muted={isVideoMuted}
+            preload="metadata"
             webkit-playsinline="true"
             className="absolute inset-0 w-full h-full object-cover hero-video"
             style={{ 
@@ -275,13 +272,13 @@ const Home = () => {
             onLoadedData={(e) => {
               console.log('Video loaded successfully');
               const video = e.currentTarget;
-              video.muted = true;
+              video.muted = isVideoMuted;
               video.playsInline = true;
               video.play().catch((error) => {
                 console.log('Video play failed on load:', error);
                 // Try again after user interaction
                 setTimeout(() => {
-                  video.muted = true;
+                  video.muted = isVideoMuted;
                   video.playsInline = true;
                   video.play().catch(console.log);
                 }, 1000);
@@ -290,7 +287,7 @@ const Home = () => {
             onCanPlay={(e) => {
               console.log('Video can play');
               const video = e.currentTarget;
-              video.muted = true;
+              video.muted = isVideoMuted;
               video.playsInline = true;
               video.play().catch((error) => {
                 console.log('Video play failed on canplay:', error);
@@ -303,7 +300,7 @@ const Home = () => {
               console.log('Video metadata loaded');
               const video = videoRef.current;
               if (video) {
-                video.muted = true;
+                video.muted = isVideoMuted;
                 video.playsInline = true;
                 video.play().catch(console.log);
               }
@@ -314,7 +311,7 @@ const Home = () => {
           </video>
           
           {/* Fallback background for mobile if video doesn't load */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 sm:hidden" style={{ zIndex: 0 }}>
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" style={{ zIndex: 0 }}>
             <div className="absolute inset-0 bg-black/20"></div>
           </div>
           
@@ -325,9 +322,12 @@ const Home = () => {
           
           {/* Video controls */}
           <div className="absolute top-4 right-4">
-            {isVideoMuted && (
-              <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
-                🔊 Click to unmute
+            <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
+              {isVideoMuted ? '🔊 Click to unmute' : '🔇 Click to mute'}
+            </div>
+            {isMobile && (
+              <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm mt-2">
+                📱 Tap to play video
               </div>
             )}
           </div>
