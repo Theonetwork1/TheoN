@@ -16,6 +16,8 @@ const Home = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isVideoMuted, setIsVideoMuted] = useState(true);
   const [showEmailPopup, setShowEmailPopup] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
   useEffect(() => {
     const observerOptions = {
@@ -230,14 +232,13 @@ const Home = () => {
             }}
             onError={(e) => {
               console.log('Video failed to load:', e);
-              // Don't hide video on mobile, show fallback instead
-              const isMobile = window.innerWidth < 768;
-              if (!isMobile) {
-                e.currentTarget.style.display = 'none';
-              }
+              setVideoError(true);
+              setVideoLoaded(false);
             }}
             onLoadedData={(e) => {
               console.log('Video loaded successfully');
+              setVideoLoaded(true);
+              setVideoError(false);
               const video = e.currentTarget;
               video.muted = true;
               video.play().catch((error) => {
@@ -250,6 +251,8 @@ const Home = () => {
             }}
             onCanPlay={(e) => {
               console.log('Video can play');
+              setVideoLoaded(true);
+              setVideoError(false);
               const video = e.currentTarget;
               video.muted = true;
               video.play().catch((error) => {
@@ -258,33 +261,38 @@ const Home = () => {
             }}
             onLoadStart={() => {
               console.log('Video load started');
+              setVideoError(false);
             }}
           >
             <source src="/hero_banner_video_theo.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          {/* Fallback background image for mobile */}
-          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat sm:hidden" 
-               style={{ backgroundImage: 'url(/theonetworkbanner.jpg)' }}>
-          </div>
+          {/* Fallback background image - only show if video failed to load */}
+          {videoError && (
+            <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+                 style={{ backgroundImage: 'url(/theonetworkbanner.jpg)' }}>
+            </div>
+          )}
           
           {/* Overlay for better text readability - positioned to not cover face */}
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-slate-800/30 to-transparent"></div>
           {/* Additional overlay for mobile text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-transparent"></div>
           
-          {/* Video controls for mobile */}
-          <div className="absolute top-4 right-4 flex flex-col gap-2">
-            {isVideoMuted && (
-              <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
-                🔊 Click to unmute
+          {/* Video controls - only show if video is loaded */}
+          {videoLoaded && !videoError && (
+            <div className="absolute top-4 right-4 flex flex-col gap-2">
+              {isVideoMuted && (
+                <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
+                  🔊 Click to unmute
+                </div>
+              )}
+              {/* Mobile video play button */}
+              <div className="sm:hidden bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
+                ▶️ Tap to play video
               </div>
-            )}
-            {/* Mobile video play button */}
-            <div className="sm:hidden bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
-              ▶️ Tap to play video
             </div>
-          </div>
+          )}
         </div>
 
         {/* Main Content - Responsive and centered */}
