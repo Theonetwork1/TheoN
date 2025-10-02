@@ -19,6 +19,7 @@ const Home = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
 
   // Detect mobile device and set initial video state
   useEffect(() => {
@@ -146,13 +147,15 @@ const Home = () => {
     const video = videoRef.current;
     if (video) {
       console.log('Video interaction triggered, current muted state:', isVideoMuted);
+      setUserInteracted(true);
       
       // Toggle mute state
       if (isVideoMuted) {
         video.muted = false;
         setIsVideoMuted(false);
         console.log('Video unmuted - attempting to play with sound');
-        // Force play after unmuting
+        
+        // Force play after unmuting with user interaction
         video.play().then(() => {
           console.log('Video playing with sound successfully');
         }).catch((error) => {
@@ -195,7 +198,7 @@ const Home = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isVideoMuted]);
+  }, [isVideoMuted, userInteracted]);
 
   useEffect(() => {
     const observerOptions = {
@@ -322,7 +325,7 @@ const Home = () => {
       {/* Main Hero Banner - Technology/Digital Focused */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" style={{ marginBottom: 0 }}>
         {/* Background Video - Full Screen */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0" onClick={handleVideoInteraction}>
           <video
             ref={videoRef}
             autoPlay
@@ -398,7 +401,7 @@ const Home = () => {
                 className="bg-orange-600/80 text-white px-4 py-3 rounded-lg text-sm font-semibold cursor-pointer hover:bg-orange-700/80 transition-colors shadow-lg"
                 onClick={handleVideoInteraction}
               >
-                {isVideoMuted ? '🔊 Tap for sound' : '🔇 Sound on'}
+                {isVideoMuted ? '🔊 Tap anywhere for sound' : '🔇 Sound on'}
               </div>
             )}
           </div>
