@@ -16,8 +16,6 @@ const Home = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isVideoMuted, setIsVideoMuted] = useState(true);
   const [showEmailPopup, setShowEmailPopup] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const [videoError, setVideoError] = useState(false);
 
   useEffect(() => {
     const observerOptions = {
@@ -70,28 +68,52 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Force video play
+  // Force video play - improved for mobile
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
       const playVideo = async () => {
         try {
+          // Ensure video is muted for autoplay on mobile
+          video.muted = true;
+          video.playsInline = true;
+          
           await video.play();
           console.log('Video playing successfully');
         } catch (error) {
           console.log('Video play failed:', error);
           // Try again after a short delay
           setTimeout(() => {
+            video.muted = true;
             video.play().catch(console.log);
           }, 1000);
         }
       };
       
+      // Try to play immediately if video is ready
       if (video.readyState >= 3) {
         playVideo();
       } else {
-        video.addEventListener('canplay', playVideo);
-        return () => video.removeEventListener('canplay', playVideo);
+        // Wait for video to be ready
+        const handleCanPlay = () => {
+          playVideo();
+          video.removeEventListener('canplay', handleCanPlay);
+        };
+        
+        video.addEventListener('canplay', handleCanPlay);
+        
+        // Also try to play when metadata is loaded
+        const handleLoadedMetadata = () => {
+          playVideo();
+          video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        };
+        
+        video.addEventListener('loadedmetadata', handleLoadedMetadata);
+        
+        return () => {
+          video.removeEventListener('canplay', handleCanPlay);
+          video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        };
       }
     }
   }, []);
@@ -222,23 +244,22 @@ const Home = () => {
             loop
             playsInline
             muted={true}
-            preload="metadata"
+            preload="auto"
             webkit-playsinline="true"
             className="absolute inset-0 w-full h-full object-cover hero-video"
             style={{ 
               objectPosition: 'center center',
-              minHeight: '100vh',
-              minWidth: '100vw'
+              width: '100%',
+              height: '100%',
+              minHeight: '100vh'
             }}
             onError={(e) => {
               console.log('Video failed to load:', e);
-              setVideoError(true);
-              setVideoLoaded(false);
+              // Show a subtle background color instead of hiding
+              e.currentTarget.style.backgroundColor = '#1e293b';
             }}
             onLoadedData={(e) => {
               console.log('Video loaded successfully');
-              setVideoLoaded(true);
-              setVideoError(false);
               const video = e.currentTarget;
               video.muted = true;
               video.play().catch((error) => {
@@ -251,8 +272,6 @@ const Home = () => {
             }}
             onCanPlay={(e) => {
               console.log('Video can play');
-              setVideoLoaded(true);
-              setVideoError(false);
               const video = e.currentTarget;
               video.muted = true;
               video.play().catch((error) => {
@@ -261,38 +280,25 @@ const Home = () => {
             }}
             onLoadStart={() => {
               console.log('Video load started');
-              setVideoError(false);
             }}
           >
             <source src="/hero_banner_video_theo.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          {/* Fallback background image - only show if video failed to load */}
-          {videoError && (
-            <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
-                 style={{ backgroundImage: 'url(/theonetworkbanner.jpg)' }}>
-            </div>
-          )}
           
           {/* Overlay for better text readability - positioned to not cover face */}
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-slate-800/30 to-transparent"></div>
           {/* Additional overlay for mobile text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-transparent"></div>
           
-          {/* Video controls - only show if video is loaded */}
-          {videoLoaded && !videoError && (
-            <div className="absolute top-4 right-4 flex flex-col gap-2">
-              {isVideoMuted && (
-                <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
-                  🔊 Click to unmute
-                </div>
-              )}
-              {/* Mobile video play button */}
-              <div className="sm:hidden bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
-                ▶️ Tap to play video
+          {/* Video controls */}
+          <div className="absolute top-4 right-4">
+            {isVideoMuted && (
+              <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
+                🔊 Click to unmute
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Main Content - Responsive and centered */}
