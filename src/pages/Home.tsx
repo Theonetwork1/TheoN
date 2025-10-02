@@ -145,9 +145,23 @@ if (mobile) {
   const handleVideoClick = () => {
     const video = videoRef.current;
     if (video && isMobile) {
-      video.muted = !video.muted;
-      setIsVideoMuted(!isVideoMuted);
-      console.log('Video muted state:', !isVideoMuted);
+      console.log('Click detected on mobile, current muted state:', video.muted);
+      
+      // Toggle mute
+      const newMutedState = !video.muted;
+      video.muted = newMutedState;
+      setIsVideoMuted(newMutedState);
+      
+      console.log('New muted state:', newMutedState);
+      
+      // Force play after unmuting
+      if (!newMutedState) {
+        video.play().then(() => {
+          console.log('Video playing with sound');
+        }).catch(err => {
+          console.error('Failed to play with sound:', err);
+        });
+      }
     }
   };
 
@@ -732,4 +746,5 @@ if (mobile) {
 };
 
 export default Home;
+
 
