@@ -24,12 +24,15 @@ const Home = () => {
   useEffect(() => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      console.log('Mobile detection:', { mobile, width: window.innerWidth, userAgent: navigator.userAgent });
       setIsMobile(mobile);
       // Mobile needs to be muted for autoplay, desktop can have sound
       if (mobile) {
         setIsVideoMuted(true);
+        console.log('Mobile detected - video will be muted');
       } else {
         setIsVideoMuted(false);
+        console.log('Desktop detected - video will have sound');
       }
     };
     
@@ -143,10 +146,14 @@ const Home = () => {
   }, [isVideoMuted]);
 
   // Handle video click to toggle sound on mobile
-  const handleVideoClick = () => {
+  const handleVideoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
     const video = videoRef.current;
     if (video && isMobile) {
       console.log('Click detected on mobile, current muted state:', video.muted);
+      console.log('isMobile:', isMobile);
       
       // Toggle mute
       const newMutedState = !video.muted;
@@ -382,12 +389,15 @@ const Home = () => {
           {/* Additional overlay for mobile text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-transparent" style={{ zIndex: 3 }}></div>
           
-          {/* Mobile sound indicator */}
+          {/* Mobile sound controls */}
           {isMobile && (
             <div className="absolute top-4 left-4" style={{ zIndex: 4 }}>
-              <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm">
-                {isVideoMuted ? 'Tap to enable sound' : 'Sound enabled'}
-              </div>
+              <button
+                onClick={handleVideoClick}
+                className="bg-black/70 hover:bg-black/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2"
+              >
+                {isVideoMuted ? '🔇 Tap to enable sound' : '🔊 Sound enabled'}
+              </button>
             </div>
           )}
           
@@ -409,8 +419,8 @@ const Home = () => {
                 transformé your business with cutting-edge technology solutions. We build the future, today.
               </p>
               
-              {/* CTA Buttons - responsive and stacked on mobile with better spacing */}
-              <div className="flex flex-col sm:flex-row gap-6 sm:gap-6 justify-center animate-fade-in animate-delay-300 hero-buttons mb-8 sm:mb-12 md:mb-16">
+                     {/* CTA Buttons - responsive and stacked on mobile with better spacing */}
+                     <div className="flex flex-col sm:flex-row gap-6 sm:gap-6 justify-center animate-fade-in animate-delay-300 hero-buttons mb-16 sm:mb-20 md:mb-24">
                 <a
                   href="https://wa.me/+17745069615?text=Hi! I'd like to discuss a digital transforméation project."
                   target="_blank"
