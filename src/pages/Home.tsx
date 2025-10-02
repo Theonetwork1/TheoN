@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Smartphone, Globe, Cog, TrendingUp, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -139,7 +139,17 @@ if (mobile) {
       video.removeEventListener('loadstart', handleLoadStart);
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
     };
-  }, [isVideoMuted]);
+
+
+  // Handle video click to toggle sound on mobile
+  const handleVideoClick = () => {
+    const video = videoRef.current;
+    if (video && isMobile) {
+      video.muted = !video.muted;
+      setIsVideoMuted(!isVideoMuted);
+      console.log('Video muted state:', !isVideoMuted);
+    }
+  };
 
   // Handle scroll to play/pause video based on hero section visibility
   useEffect(() => {
@@ -293,7 +303,7 @@ if (mobile) {
       {/* Main Hero Banner - Technology/Digital Focused */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" style={{ marginBottom: 0 }}>
         {/* Background Video - Full Screen */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0" onClick={handleVideoClick}>
           <video
             ref={videoRef}
             autoPlay
@@ -595,7 +605,7 @@ if (mobile) {
 
       {/* Animated Separator */}
       <section className="relative py-8 bg-gradient-to-r from-slate-900 via-slate-800 to-orange-900 overflow-hidden">
-        <div className="absolute inset-0">
+        <div className="absolute inset-0" onClick={handleVideoClick}>
           <div className="absolute inset-0 opacity-20">
             <div className="absolute w-full h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent animate-pulse"></div>
           </div>
@@ -656,7 +666,7 @@ if (mobile) {
       {/* CTA Section - Enhanced with Animations */}
       <section className="relative py-20 bg-gradient-to-r from-slate-900 via-slate-800 to-orange-900 text-white overflow-hidden">
         {/* Animated background elements */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0" onClick={handleVideoClick}>
           <div className="absolute inset-0 opacity-20">
             <div className="absolute w-96 h-96 bg-orange-500 rounded-full blur-3xl animate-pulse" style={{ left: '5%', top: '10%', animationDelay: '0s' }} />
             <div className="absolute w-64 h-64 bg-blue-500 rounded-full blur-2xl animate-pulse" style={{ right: '10%', top: '20%', animationDelay: '2s' }} />
@@ -722,3 +732,4 @@ if (mobile) {
 };
 
 export default Home;
+
