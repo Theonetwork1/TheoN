@@ -25,11 +25,8 @@ const Home = () => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       setIsMobile(mobile);
-      if (mobile) {
-        setIsVideoMuted(false); // Keep sound enabled for both
-      } else {
-        // Desktop already set to false
-      }
+      // Keep sound enabled
+      setIsVideoMuted(false);
     };
     
     checkMobile();
@@ -140,8 +137,6 @@ const Home = () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
     };
   }, [isVideoMuted]);
-
-
 
   // Handle scroll to play/pause video based on hero section visibility
   useEffect(() => {
@@ -359,24 +354,14 @@ const Home = () => {
           {/* Additional overlay for mobile text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-transparent" style={{ zIndex: 3 }}></div>
           
-          {/* Only show error message if video fails */}          {videoError && (            <div className="absolute top-4 right-4" style={{ zIndex: 4 }}>              <div className="bg-red-500/50 text-white px-3 py-2 rounded-lg text-sm">                ⚠️ Video failed to load              </div>            </div>          )}
-            )}
-            {isMobile && (
-              <div className="flex flex-col gap-2">
-                <div 
-                  className="bg-orange-600/90 text-white px-4 py-3 rounded-lg text-sm font-semibold cursor-pointer hover:bg-orange-700/90 transition-colors shadow-lg"
-                 
-                >
-                  {isVideoMuted ? '🔊 Tap anywhere for sound' : '🔇 Sound on'}
-                </div>
-                {!userInteracted && (
-                  <div className="bg-blue-600/90 text-white px-3 py-2 rounded-lg text-xs text-center">
-                    Tap video to enable sound
-                  </div>
-                )}
+          {/* Only show error */}
+          {videoError && (
+            <div className="absolute top-4 right-4" style={{ zIndex: 4 }}>
+              <div className="bg-red-500/50 text-white px-3 py-2 rounded-lg text-sm">
+                âš ï¸ Video failed
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Main Content - Responsive and centered */}
@@ -734,11 +719,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
-
-
-
-
-
-
