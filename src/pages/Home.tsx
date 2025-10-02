@@ -97,10 +97,17 @@ const Home = () => {
   // Handle user interaction to unmute video
   const handleVideoInteraction = () => {
     const video = videoRef.current;
-    if (video && isVideoMuted) {
-      video.muted = false;
-      setIsVideoMuted(false);
-      console.log('Video unmuted');
+    if (video) {
+      // Force play on mobile when user interacts
+      video.play().catch((error) => {
+        console.log('Video play failed on interaction:', error);
+      });
+      
+      if (isVideoMuted) {
+        video.muted = false;
+        setIsVideoMuted(false);
+        console.log('Video unmuted');
+      }
     }
   };
 
@@ -212,36 +219,72 @@ const Home = () => {
             autoPlay
             loop
             playsInline
-            muted={isVideoMuted}
+            muted={true}
+            preload="metadata"
+            webkit-playsinline="true"
             className="absolute inset-0 w-full h-full object-cover hero-video"
-            style={{ objectPosition: 'center center' }}
+            style={{ 
+              objectPosition: 'center center',
+              minHeight: '100vh',
+              minWidth: '100vw'
+            }}
             onError={(e) => {
               console.log('Video failed to load:', e);
-              e.currentTarget.style.display = 'none';
+              // Don't hide video on mobile, show fallback instead
+              const isMobile = window.innerWidth < 768;
+              if (!isMobile) {
+                e.currentTarget.style.display = 'none';
+              }
             }}
             onLoadedData={(e) => {
               console.log('Video loaded successfully');
-              e.currentTarget.play().catch(console.log);
+              const video = e.currentTarget;
+              video.muted = true;
+              video.play().catch((error) => {
+                console.log('Video play failed on load:', error);
+                // Try again after user interaction
+                setTimeout(() => {
+                  video.play().catch(console.log);
+                }, 1000);
+              });
             }}
             onCanPlay={(e) => {
               console.log('Video can play');
-              e.currentTarget.play().catch(console.log);
+              const video = e.currentTarget;
+              video.muted = true;
+              video.play().catch((error) => {
+                console.log('Video play failed on canplay:', error);
+              });
+            }}
+            onLoadStart={() => {
+              console.log('Video load started');
             }}
           >
             <source src="/hero_banner_video_theo.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+          {/* Fallback background image for mobile */}
+          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat sm:hidden" 
+               style={{ backgroundImage: 'url(/theonetworkbanner.jpg)' }}>
+          </div>
+          
           {/* Overlay for better text readability - positioned to not cover face */}
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-slate-800/30 to-transparent"></div>
           {/* Additional overlay for mobile text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-transparent"></div>
           
-          {/* Sound indicator */}
-          {isVideoMuted && (
-            <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
-              🔊 Click to unmute
+          {/* Video controls for mobile */}
+          <div className="absolute top-4 right-4 flex flex-col gap-2">
+            {isVideoMuted && (
+              <div className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
+                🔊 Click to unmute
+              </div>
+            )}
+            {/* Mobile video play button */}
+            <div className="sm:hidden bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors" onClick={handleVideoInteraction}>
+              ▶️ Tap to play video
             </div>
-          )}
+          </div>
         </div>
 
         {/* Main Content - Responsive and centered */}
