@@ -14,12 +14,11 @@ const Home = () => {
   // État pour les animations interactives
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [isVideoMuted, setIsVideoMuted] = useState(true);
+  const [isVideoMuted, setIsVideoMuted] = useState(false);
   const [showEmailPopup, setShowEmailPopup] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
-  const [userInteracted, setUserInteracted] = useState(false);
 
   // Detect mobile device and set initial video state
   useEffect(() => {
@@ -27,9 +26,9 @@ const Home = () => {
       const mobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       setIsMobile(mobile);
       if (mobile) {
-        setIsVideoMuted(true); // Mute on mobile only for autoplay compatibility
+        setIsVideoMuted(false); // Keep sound enabled for both
       } else {
-        setIsVideoMuted(false); // Keep desktop with sound as it was working
+        // Desktop already set to false
       }
     };
     
@@ -142,41 +141,7 @@ const Home = () => {
     };
   }, [isVideoMuted]);
 
-  // Handle user interaction
-  const handleVideoInteraction = () => {
-    const video = videoRef.current;
-    if (video) {
-      console.log('Video interaction triggered, current muted state:', isVideoMuted);
-      setUserInteracted(true);
-      
-      // Toggle mute state
-      if (isVideoMuted) {
-        // First pause the video
-        video.pause();
-        
-        // Then unmute and play
-        video.muted = false;
-        setIsVideoMuted(false);
-        console.log('Video unmuted - attempting to play with sound');
-        
-        // Force play after unmuting with user interaction
-        video.play().then(() => {
-          console.log('Video playing with sound successfully');
-        }).catch((error) => {
-          console.log('Video play with sound failed:', error);
-          // If play fails, try muted play
-          video.muted = true;
-          setIsVideoMuted(true);
-          video.play().catch(console.log);
-        });
-      } else {
-        video.muted = true;
-        setIsVideoMuted(true);
-        console.log('Video muted');
-        video.play().catch(console.log);
-      }
-    }
-  };
+
 
   // Handle scroll to play/pause video based on hero section visibility
   useEffect(() => {
@@ -203,7 +168,7 @@ const Home = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isVideoMuted, userInteracted]);
+  }, [isVideoMuted]);
 
   useEffect(() => {
     const observerOptions = {
@@ -330,7 +295,7 @@ const Home = () => {
       {/* Main Hero Banner - Technology/Digital Focused */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" style={{ marginBottom: 0 }}>
         {/* Background Video - Full Screen */}
-        <div className="absolute inset-0" onClick={handleVideoInteraction}>
+        <div className="absolute inset-0">
           <video
             ref={videoRef}
             autoPlay
@@ -394,31 +359,13 @@ const Home = () => {
           {/* Additional overlay for mobile text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-transparent" style={{ zIndex: 3 }}></div>
           
-          {/* Mobile interaction overlay */}
-          {isMobile && !userInteracted && (
-            <div 
-              className="absolute inset-0 bg-black/20 flex items-center justify-center" 
-              style={{ zIndex: 5 }}
-              onClick={handleVideoInteraction}
-            >
-              <div className="bg-orange-600 text-white px-6 py-4 rounded-lg text-lg font-bold cursor-pointer hover:bg-orange-700 transition-colors shadow-xl">
-                🔊 Tap to enable sound
-              </div>
-            </div>
-          )}
-          
-          {/* Video controls - minimal for mobile sound activation */}
-          <div className="absolute top-4 right-4" style={{ zIndex: 4 }}>
-            {videoError && (
-              <div className="bg-red-500/50 text-white px-3 py-2 rounded-lg text-sm mb-2">
-                ⚠️ Video failed to load
-              </div>
+          {/* Only show error message if video fails */}          {videoError && (            <div className="absolute top-4 right-4" style={{ zIndex: 4 }}>              <div className="bg-red-500/50 text-white px-3 py-2 rounded-lg text-sm">                ⚠️ Video failed to load              </div>            </div>          )}
             )}
             {isMobile && (
               <div className="flex flex-col gap-2">
                 <div 
                   className="bg-orange-600/90 text-white px-4 py-3 rounded-lg text-sm font-semibold cursor-pointer hover:bg-orange-700/90 transition-colors shadow-lg"
-                  onClick={handleVideoInteraction}
+                 
                 >
                   {isVideoMuted ? '🔊 Tap anywhere for sound' : '🔇 Sound on'}
                 </div>
@@ -787,3 +734,11 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+
+
+
+
+
