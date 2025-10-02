@@ -11,7 +11,7 @@ const Home = () => {
   const testimonialsRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   
-  // �État pour les animations interactives
+  // État pour les animations interactives
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
@@ -67,7 +67,7 @@ const Home = () => {
       try {
         console.log('Attempting to play video...', {
           muted: isVideoMuted,
-          readystate: video.readystate,
+          readyState: video.readyState,
           src: video.src,
           currentSrc: video.currentSrc
         });
@@ -107,8 +107,8 @@ const Home = () => {
       console.error('Video error occurred:', e);
       console.error('Video error details:', {
         error: video.error,
-        networkstate: video.networkstate,
-        readystate: video.readystate,
+        networkState: video.networkState,
+        readyState: video.readyState,
         src: video.src,
         currentSrc: video.currentSrc
       });
@@ -145,7 +145,7 @@ const Home = () => {
     };
   }, [isVideoMuted]);
 
-  // Handle video click to toggle sound on mobile - CORRECTION PRINCIPALE
+  // Handle video click to toggle sound on mobile
   const handleVideoClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -162,16 +162,12 @@ const Home = () => {
       
       console.log('New muted state:', newMutedState);
       
-      // Force play after unmuting - CORRECTION CRITIQUE
+      // Force play after unmuting
       if (!newMutedState) {
         video.play().then(() => {
-          console.log('Video playing with sound successfully');
+          console.log('Video playing with sound');
         }).catch(err => {
           console.error('Failed to play with sound:', err);
-          // Retry once more
-          setTimeout(() => {
-            video.play().catch(console.error);
-          }, 100);
         });
       }
     }
@@ -237,7 +233,7 @@ const Home = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Afficher le popup email apr�s 10 secondes
+  // Afficher le popup email après 10 secondes
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowEmailPopup(true);
@@ -246,7 +242,7 @@ const Home = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Auto-roÉtation des t�moignages
+  // Auto-rotation des témoignages
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTestimonial((prev) => (prev + 1) % 6);
@@ -282,25 +278,25 @@ const Home = () => {
     {
       name: 'Jean-Baptiste Pierre',
       nationality: 'Haitian',
-      content: 'Theonetwork a transformé� compl�tement notre pr�sence num�rique. Leur expertise en d�veloppement d\'applications et automatisation de syst�mes nous a fait �économiser des mois de travail.',
+      content: 'Theonetwork a transformé complètement notre présence numérique. Leur expertise en développement d\'applications et automatisation de systèmes nous a fait économiser des mois de travail.',
       rating: 5,
     },
     {
-      name: 'Marie-Claire Fran�ois',
+      name: 'Marie-Claire François',
       nationality: 'Haitian',
-      content: 'Service professionnel, fiable et innovant. L\'�équipe a livré� exactement ce dont nous avions besoin et a d�pass� nos attentes.',
+      content: 'Service professionnel, fiable et innovant. L\'équipe a livré exactement ce dont nous avions besoin et a dépassé nos attentes.',
       rating: 5,
     },
     {
       name: 'Sarah Johnson',
       nationality: 'American',
-      content: 'Theonetwork transforméed our digital presence completely. Their expertise in app development and system automation saved us months of work.',
+      content: 'Theonetwork transformed our digital presence completely. Their expertise in app development and system automation saved us months of work.',
       rating: 5,
     },
     {
       name: 'Michael Chen',
       nationality: 'American',
-      content: 'Professional, reliable, and innovative. The team delivered exactly what we needed and exceeded our expecÉtations.',
+      content: 'Professional, reliable, and innovative. The team delivered exactly what we needed and exceeded our expectations.',
       rating: 5,
     },
     {
@@ -317,7 +313,7 @@ const Home = () => {
     },
   ];
 
-  const sÉtats = [
+  const stats = [
     { number: '100+', label: 'Projects Completed' },
     { number: '50+', label: 'Happy Clients' },
     { number: '5+', label: 'Years Experience' },
@@ -329,7 +325,7 @@ const Home = () => {
       {/* Main Hero Banner - Technology/Digital Focused */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" style={{ marginBottom: 0 }}>
         {/* Background Video - Full Screen */}
-        <div className="absolute inset-0 video-banner" onClick={handleVideoClick}>
+        <div className="absolute inset-0" onClick={handleVideoClick}>
           <video
             ref={videoRef}
             autoPlay
@@ -338,7 +334,7 @@ const Home = () => {
             muted={isVideoMuted}
             preload="auto"
             webkit-playsinline="true"
-            className="absolute inset-0 w-full h-full object-cover hero-video video-banner-video"
+            className="absolute inset-0 w-full h-full object-cover hero-video cursor-pointer"
             style={{ 
               objectPosition: 'center center',
               width: '100%',
@@ -420,26 +416,26 @@ const Home = () => {
               
               {/* Subheading - responsive sizing with better spacing */}
               <p className="text-lg sm:text-lg md:text-xl lg:text-2xl text-orange-100 mb-8 sm:mb-8 md:mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in animate-delay-200 text-center px-2 hero-subtitle">
-                transformé your business with cutting-edge technology solutions. We build the future, today.
+                Transform your business with cutting-edge technology solutions. We build the future, today.
               </p>
               
-                     {/* CTA Buttons - responsive and stacked on mobile with better spacing */}
-                     <div className="flex flex-col sm:flex-row gap-6 sm:gap-6 justify-center animate-fade-in animate-delay-300 hero-buttons mb-16 sm:mb-20 md:mb-24">
+              {/* CTA Buttons - responsive and stacked on mobile with better spacing */}
+              <div className="flex flex-col sm:flex-row gap-6 sm:gap-6 justify-center animate-fade-in animate-delay-300 hero-buttons mb-8 sm:mb-12 md:mb-16">
                 <a
-                  href="https://wa.me/+17745069615?text=Hi! I'd like to discuss a digital transforméation project."
+                  href="https://wa.me/+17745069615?text=Hi! I'd like to discuss a digital transformation project."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center justify-center px-6 sm:px-8 md:px-12 py-4 sm:py-4 md:py-6 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-semibold sm:font-bold text-base sm:text-base md:text-lg lg:text-xl rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl transition-all duration-300 transformé hover:scale-105 hover:shadow-orange-500/25 btn-animate hero-button"
+                  className="group inline-flex items-center justify-center px-6 sm:px-8 md:px-12 py-4 sm:py-4 md:py-6 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-semibold sm:font-bold text-base sm:text-base md:text-lg lg:text-xl rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 btn-animate hero-button"
                 >
                   Start Your Digital Journey
-                  <ArrowRight className="ml-3 sm:ml-3 w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transformé duration-300" />
+                  <ArrowRight className="ml-3 sm:ml-3 w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
                 <Link
                   to="/services"
-                  className="group inline-flex items-center justify-center px-6 sm:px-8 md:px-12 py-4 sm:py-4 md:py-6 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-semibold sm:font-bold text-base sm:text-base md:text-lg lg:text-xl rounded-lg sm:rounded-xl md:rounded-2xl border border-white/20 transition-all duration-300 transformé hover:scale-105 hover-lift hero-button"
+                  className="group inline-flex items-center justify-center px-6 sm:px-8 md:px-12 py-4 sm:py-4 md:py-6 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-semibold sm:font-bold text-base sm:text-base md:text-lg lg:text-xl rounded-lg sm:rounded-xl md:rounded-2xl border border-white/20 transition-all duration-300 transform hover:scale-105 hover-lift hero-button"
                 >
                   Explore Solutions
-                  <ArrowRight className="ml-3 sm:ml-3 w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transformé duration-300" />
+                  <ArrowRight className="ml-3 sm:ml-3 w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </div>
             </div>
@@ -448,16 +444,16 @@ const Home = () => {
 
       </section>
 
-      {/* SÉtats Section */}
+      {/* Stats Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 animate-on-scroll">
-            {sÉtats.map((sÉtat, index) => (
+            {stats.map((stat, index) => (
               <div key={index} className="text-center animate-scale-in" style={{ animationDelay: `${index * 0.1}s` }}>
                 <div className="text-3xl md:text-4xl font-bold gradient-text mb-2">
-                  {sÉtat.number}
+                  {stat.number}
                 </div>
-                <div className="text-slate-600 font-medium">{sÉtat.label}</div>
+                <div className="text-slate-600 font-medium">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -480,10 +476,10 @@ const Home = () => {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="group bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transformé hover:-translate-y-4 border border-gray-100 animate-on-scroll hover-lift cursor-pointer"
+                className="group bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 border border-gray-100 animate-on-scroll hover-lift cursor-pointer"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="text-orange-600 mb-6 animate-scale-in group-hover:scale-110 group-hover:roÉtate-12 transition-all duration-300" style={{ animationDelay: `${index * 0.1 + 0.2}s` }}>
+                <div className="text-orange-600 mb-6 animate-scale-in group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" style={{ animationDelay: `${index * 0.1 + 0.2}s` }}>
                   {service.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-4 group-hover:text-orange-600 transition-colors duration-300">
@@ -502,7 +498,7 @@ const Home = () => {
           <div className="text-center mt-12 animate-on-scroll">
             <Link
               to="/services"
-              className="inline-flex items-center px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-lg transition-all duration-300 transformé hover:scale-105 btn-animate"
+              className="inline-flex items-center px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 btn-animate"
             >
               View All Services
               <ArrowRight className="ml-2 w-5 h-5" />
@@ -550,10 +546,10 @@ const Home = () => {
                 href="https://wa.me/+17745069615?text=Hi! I'm interested in your services."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center px-3 sm:px-6 md:px-8 py-1.5 sm:py-3 md:py-4 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-xs sm:text-base md:text-lg rounded-md sm:rounded-xl shadow-2xl transition-all duration-300 transformé hover:scale-105 hover:shadow-orange-500/25 banner-button"
+                className="group inline-flex items-center px-3 sm:px-6 md:px-8 py-1.5 sm:py-3 md:py-4 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-xs sm:text-base md:text-lg rounded-md sm:rounded-xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 banner-button"
               >
                 Get Started Today
-                <ArrowRight className="ml-1.5 sm:ml-3 w-3 h-3 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transformé duration-300" />
+                <ArrowRight className="ml-1.5 sm:ml-3 w-3 h-3 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
               </a>
             </div>
           </div>
@@ -574,21 +570,21 @@ const Home = () => {
 
           {/* Carousel Container */}
           <div className="relative overflow-hidden">
-              <div
-              className="flex transition-transformé duration-500 ease-in-out"
-              style={{ transformé: `translateX(-${currentTestimonial * 100}%)` }}
-              >
+            <div
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}
+            >
               {testimonials.map((testimonial, index) => (
                 <div key={index} className="w-full flex-shrink-0 px-4">
                   <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 animate-on-scroll hover-lift max-w-4xl mx-auto">
                     <div className="flex items-center justify-center mb-6">
-                  {[...Array(testimonial.rating)].map((_, i) => (
+                      {[...Array(testimonial.rating)].map((_, i) => (
                         <Star key={i} className="w-6 h-6 text-yellow-400 fill-current" />
-                  ))}
-                </div>
+                      ))}
+                    </div>
                     <p className="text-slate-600 mb-8 leading-relaxed text-center text-lg">
-                  "{testimonial.content}"
-                </p>
+                      "{testimonial.content}"
+                    </p>
                     <div className="text-center">
                       <div className="font-bold text-slate-900 text-xl mb-2">{testimonial.name}</div>
                       <div className="text-orange-600 font-semibold">{testimonial.nationality}</div>
@@ -596,8 +592,8 @@ const Home = () => {
                   </div>
                 </div>
               ))}
-                </div>
-              </div>
+            </div>
+          </div>
 
           {/* Navigation Controls */}
           <div className="flex justify-center items-center mt-8 space-x-4">
@@ -671,10 +667,10 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {[
-               { step: '01', title: 'Discovery', description: 'We analyze your needs and define project requirements', icon: '🔍', color: 'from-blue-500 to-blue-600' },
-               { step: '02', title: 'Planning', description: 'Create detailed roadmap and timeline for your project', icon: '📋', color: 'from-green-500 to-green-600' },
-               { step: '03', title: 'Development', description: 'Build your solution using best practices and latest tech', icon: '⚡', color: 'from-orange-500 to-orange-600' },
-               { step: '04', title: 'Launch', description: 'Deploy, test, and provide ongoing support and maintenance', icon: '🚀', color: 'from-purple-500 to-purple-600' },
+              { step: '01', title: 'Discovery', description: 'We analyze your needs and define project requirements', icon: '🔍', color: 'from-blue-500 to-blue-600' },
+              { step: '02', title: 'Planning', description: 'Create detailed roadmap and timeline for your project', icon: '📋', color: 'from-green-500 to-green-600' },
+              { step: '03', title: 'Development', description: 'Build your solution using best practices and latest tech', icon: '⚡', color: 'from-orange-500 to-orange-600' },
+              { step: '04', title: 'Launch', description: 'Deploy, test, and provide ongoing support and maintenance', icon: '🚀', color: 'from-purple-500 to-purple-600' },
             ].map((process, index) => (
               <div 
                 key={index} 
@@ -684,7 +680,7 @@ const Home = () => {
                 <div className={`w-20 h-20 bg-gradient-to-r ${process.color} text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-6 hover-lift transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}>
                   {process.step}
                 </div>
-                <div className="text-5xl mb-6 transition-transformé duration-300 group-hover:scale-110 group-hover:roÉtate-12">{process.icon}</div>
+                <div className="text-5xl mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">{process.icon}</div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-4 transition-colors duration-300 group-hover:text-orange-600">{process.title}</h3>
                 <p className="text-slate-600 leading-relaxed transition-colors duration-300 group-hover:text-slate-700">{process.description}</p>
               </div>
@@ -720,32 +716,32 @@ const Home = () => {
             
             <h2 className="text-3xl md:text-5xl font-bold mb-6 animate-fade-in">
               <span className="bg-gradient-to-r from-white via-orange-100 to-orange-200 bg-clip-text text-transparent">
-            Ready to transformé Your Business?
+                Ready to Transform Your Business?
               </span>
-          </h2>
+            </h2>
             
             <p className="text-xl text-slate-300 mb-12 max-w-3xl mx-auto animate-fade-in animate-delay-200 leading-relaxed">
-            Join hundreds of satisfied clients who have elevated their digital presence with our expert solutions.
+              Join hundreds of satisfied clients who have elevated their digital presence with our expert solutions.
               Let's build something extraordinary together.
-          </p>
+            </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in animate-delay-400">
-          <a
-            href="https://wa.me/+17745069615?text=Hi! I'm ready to transformé my business with Theonetwork."
-            target="_blank"
-            rel="noopener noreferrer"
-                className="group inline-flex items-center px-10 py-5 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-lg rounded-2xl shadow-2xl transition-all duration-300 transformé hover:scale-105 hover:shadow-orange-500/25 btn-animate"
-          >
-            Start Your Project Today
-                <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transformé duration-300" />
+              <a
+                href="https://wa.me/+17745069615?text=Hi! I'm ready to transform my business with Theonetwork."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center px-10 py-5 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold text-lg rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-orange-500/25 btn-animate"
+              >
+                Start Your Project Today
+                <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
               </a>
               
               <Link
                 to="/contact"
-                className="group inline-flex items-center px-10 py-5 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-bold text-lg rounded-2xl border border-white/20 transition-all duration-300 transformé hover:scale-105 hover-lift"
+                className="group inline-flex items-center px-10 py-5 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-bold text-lg rounded-2xl border border-white/20 transition-all duration-300 transform hover:scale-105 hover-lift"
               >
                 Get In Touch
-                <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transformé duration-300" />
+                <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
               </Link>
             </div>
           </div>
@@ -762,4 +758,3 @@ const Home = () => {
 };
 
 export default Home;
-
