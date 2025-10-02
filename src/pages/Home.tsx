@@ -174,7 +174,8 @@ const Home = () => {
   };
 
   // Handle touch to enable sound on mobile
-  const handleTouchStart = () => {
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
     const video = videoRef.current;
     if (video && isMobile && video.muted) {
       console.log('Touch detected on mobile - enabling sound');
@@ -188,9 +189,24 @@ const Home = () => {
     }
   };
 
+  // Handle scroll to enable sound on mobile
+  const handleScroll = () => {
+    const video = videoRef.current;
+    if (video && isMobile && video.muted) {
+      console.log('Scroll detected on mobile - enabling sound');
+      video.muted = false;
+      setIsVideoMuted(false);
+      video.play().then(() => {
+        console.log('Video playing with sound after scroll');
+      }).catch(err => {
+        console.error('Failed to play with sound after scroll:', err);
+      });
+    }
+  };
+
   // Handle scroll to play/pause video based on hero section visibility
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScrollVideo = () => {
       const video = videoRef.current;
       const heroSection = heroRef.current;
       
@@ -211,9 +227,17 @@ const Home = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScrollVideo);
+    return () => window.removeEventListener('scroll', handleScrollVideo);
   }, [isVideoMuted]);
+
+  // Add scroll listener for mobile sound activation
+  useEffect(() => {
+    if (isMobile) {
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
+  }, [isMobile]);
 
   useEffect(() => {
     const observerOptions = {
@@ -408,7 +432,21 @@ const Home = () => {
           {isMobile && (
             <div className="absolute top-4 left-4" style={{ zIndex: 4 }}>
               <button
-                onClick={handleVideoClick}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const video = videoRef.current;
+                  if (video) {
+                    console.log('Button clicked - enabling sound');
+                    video.muted = false;
+                    setIsVideoMuted(false);
+                    video.play().then(() => {
+                      console.log('Video playing with sound after button click');
+                    }).catch(err => {
+                      console.error('Failed to play with sound after button click:', err);
+                    });
+                  }
+                }}
                 className="bg-black/70 hover:bg-black/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2"
               >
                 {isVideoMuted ? '🔇 Tap to enable sound' : '🔊 Sound enabled'}
