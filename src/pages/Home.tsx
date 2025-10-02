@@ -25,11 +25,8 @@ const Home = () => {
     const checkMobile = () => {
       const mobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       setIsMobile(mobile);
-      if (mobile) {
-        setIsVideoMuted(true); // Mute on mobile by default
-      } else {
-        setIsVideoMuted(false); // Unmute on desktop by default
-      }
+      // Always start muted for autoplay compatibility, user can unmute
+      setIsVideoMuted(true);
     };
     
     checkMobile();
@@ -173,6 +170,7 @@ const Home = () => {
         
         if (isHeroVisible) {
           // Play video when hero section is visible
+          video.muted = isVideoMuted; // Ensure mute state is respected
           video.play().catch(console.log);
           console.log('Video playing due to scroll to hero section');
         } else {
@@ -185,7 +183,7 @@ const Home = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isVideoMuted]);
 
   useEffect(() => {
     const observerOptions = {
@@ -376,11 +374,19 @@ const Home = () => {
           {/* Additional overlay for mobile text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-transparent" style={{ zIndex: 3 }}></div>
           
-          {/* Video controls - hidden for cleaner look */}
+          {/* Video controls - minimal for mobile sound activation */}
           <div className="absolute top-4 right-4" style={{ zIndex: 4 }}>
             {videoError && (
-              <div className="bg-red-500/50 text-white px-3 py-2 rounded-lg text-sm">
+              <div className="bg-red-500/50 text-white px-3 py-2 rounded-lg text-sm mb-2">
                 ⚠️ Video failed to load
+              </div>
+            )}
+            {isMobile && videoLoaded && (
+              <div 
+                className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors"
+                onClick={handleVideoInteraction}
+              >
+                {isVideoMuted ? '🔊 Tap for sound' : '🔇 Sound on'}
               </div>
             )}
           </div>
