@@ -145,18 +145,27 @@ const Home = () => {
   const handleVideoInteraction = () => {
     const video = videoRef.current;
     if (video) {
-      // Force play
-      video.play().catch(console.log);
+      console.log('Video interaction triggered, current muted state:', isVideoMuted);
       
-      // Toggle mute
+      // Toggle mute state
       if (isVideoMuted) {
         video.muted = false;
         setIsVideoMuted(false);
-        console.log('Video unmuted');
+        console.log('Video unmuted - attempting to play with sound');
+        // Force play after unmuting
+        video.play().then(() => {
+          console.log('Video playing with sound successfully');
+        }).catch((error) => {
+          console.log('Video play with sound failed:', error);
+          // If play fails, try muted play
+          video.muted = true;
+          video.play().catch(console.log);
+        });
       } else {
         video.muted = true;
         setIsVideoMuted(true);
         console.log('Video muted');
+        video.play().catch(console.log);
       }
     }
   };
@@ -384,9 +393,9 @@ const Home = () => {
                 ⚠️ Video failed to load
               </div>
             )}
-            {isMobile && videoLoaded && (
+            {isMobile && (
               <div 
-                className="bg-black/50 text-white px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-black/70 transition-colors"
+                className="bg-orange-600/80 text-white px-4 py-3 rounded-lg text-sm font-semibold cursor-pointer hover:bg-orange-700/80 transition-colors shadow-lg"
                 onClick={handleVideoInteraction}
               >
                 {isVideoMuted ? '🔊 Tap for sound' : '🔇 Sound on'}
