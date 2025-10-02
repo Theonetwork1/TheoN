@@ -67,7 +67,7 @@ const translations = {
     'footer.services.title': 'Services',
     'footer.company.title': 'Company',
     'footer.support.title': 'Support',
-    'footer.rights': '2024 Theonetwork. All rights reserved.',
+    'footer.rights': '2025 Theonetwork. All rights reserved.',
   },
   ht: {
     // Navigation
@@ -125,7 +125,7 @@ const translations = {
     'footer.services.title': 'Sèvis yo',
     'footer.company.title': 'Konpayi',
     'footer.support.title': 'Sipò',
-    'footer.rights': '2024 Theonetwork. Tout dwa yo rezève.',
+    'footer.rights': '2025 Theonetwork. Tout dwa yo rezève.',
   },
   fr: {
     // Navigation
@@ -183,7 +183,7 @@ const translations = {
     'footer.services.title': 'Services',
     'footer.company.title': 'Entreprise',
     'footer.support.title': 'Support',
-    'footer.rights': '2024 Theonetwork. Tous droits réservés.',
+    'footer.rights': '2025 Theonetwork. Tous droits réservés.',
   },
 };
 
