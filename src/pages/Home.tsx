@@ -14,7 +14,7 @@ const Home = () => {
   // �État pour les animations interactives
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [isVideoMuted, setIsVideoMuted] = useState(false);
+  const [isVideoMuted, setIsVideoMuted] = useState(true); // Start muted for mobile compatibility
   const [showEmailPopup, setShowEmailPopup] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
@@ -36,9 +36,17 @@ const Home = () => {
       }
     };
     
+    // Run immediately
     checkMobile();
+    
+    // Also run after a short delay to ensure proper detection
+    const timeoutId = setTimeout(checkMobile, 100);
+    
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   // Video management - completely refactored
@@ -151,23 +159,35 @@ const Home = () => {
     e.stopPropagation();
     
     const video = videoRef.current;
-    if (video && isMobile) {
-      console.log('Click detected on mobile, current muted state:', video.muted);
-      console.log('isMobile:', isMobile);
-      
+    console.log('Click detected:', { 
+      video: !!video, 
+      isMobile, 
+      currentMuted: video?.muted,
+      videoState: video?.readyState 
+    });
+    
+    if (video) {
       // Toggle mute
       const newMutedState = !video.muted;
       video.muted = newMutedState;
       setIsVideoMuted(newMutedState);
       
-      console.log('New muted state:', newMutedState);
+      console.log('Toggled mute state:', { 
+        from: video.muted, 
+        to: newMutedState,
+        isMobile 
+      });
       
       // Force play after unmuting
       if (!newMutedState) {
         video.play().then(() => {
-          console.log('Video playing with sound');
+          console.log('Video playing with sound successfully');
         }).catch(err => {
           console.error('Failed to play with sound:', err);
+          // Try again after a short delay
+          setTimeout(() => {
+            video.play().catch(console.error);
+          }, 100);
         });
       }
     }
@@ -334,7 +354,8 @@ const Home = () => {
             muted={isVideoMuted}
             preload="auto"
             webkit-playsinline="true"
-            className="absolute inset-0 w-full h-full object-cover hero-video video-banner-video"
+            onClick={handleVideoClick}
+            className="absolute inset-0 w-full h-full object-cover hero-video video-banner-video cursor-pointer"
             style={{ 
               objectPosition: 'center center',
               width: '100%',
@@ -389,17 +410,15 @@ const Home = () => {
           {/* Additional overlay for mobile text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-transparent" style={{ zIndex: 3 }}></div>
           
-          {/* Mobile sound controls */}
-          {isMobile && (
-            <div className="absolute top-4 left-4" style={{ zIndex: 4 }}>
-              <button
-                onClick={handleVideoClick}
-                className="bg-black/70 hover:bg-black/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2"
-              >
-                {isVideoMuted ? '🔇 Tap to enable sound' : '🔊 Sound enabled'}
-              </button>
-            </div>
-          )}
+          {/* Sound controls - always visible */}
+          <div className="absolute top-4 left-4" style={{ zIndex: 4 }}>
+            <button
+              onClick={handleVideoClick}
+              className="bg-black/70 hover:bg-black/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2"
+            >
+              {isVideoMuted ? '🔇 Tap to enable sound' : '🔊 Sound enabled'}
+            </button>
+          </div>
           
         </div>
 
