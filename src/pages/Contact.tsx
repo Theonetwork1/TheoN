@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Send, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import SEO from '../components/SEO';
 
 const Contact = () => {
   const { t } = useLanguage();
@@ -62,8 +63,38 @@ const Contact = () => {
     });
   };
 
+  const contactStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Theo Network",
+    "description": "Get in touch with Theo Network for digital transformation services. Contact us via email, WhatsApp, or schedule a consultation.",
+    "url": "https://theonetwork1.com/contact",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Theonetwork",
+      "url": "https://theonetwork1.com",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-774-506-9615",
+        "contactType": "customer service",
+        "availableLanguage": ["English", "French", "Haitian Creole"],
+        "areaServed": "Worldwide"
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Contact Us | Theo Network - Get In Touch Today"
+        description="Contact Theo Network for professional digital transformation services. Reach out via email, WhatsApp, or schedule a consultation. We respond within 24 hours."
+        keywords="contact theonetwork, digital transformation consultation, web development contact, mobile app development inquiry, business automation services"
+        canonical="/contact"
+        ogTitle="Contact Theo Network - Digital Transformation Experts"
+        ogDescription="Get in touch with Theo Network for professional digital transformation services. We respond within 24 hours."
+        ogUrl="/contact"
+        structuredData={contactStructuredData}
+      />
       {/* Hero Section */}
       <header className="bg-gradient-to-br from-slate-50 to-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

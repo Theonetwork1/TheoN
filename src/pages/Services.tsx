@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Smartphone, Globe, Cog, TrendingUp, ArrowRight, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import SEO from '../components/SEO';
 
 const Services = () => {
   const { t } = useLanguage();
@@ -80,8 +81,71 @@ const Services = () => {
     },
   ];
 
+  const servicesStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Digital Transformation Services",
+    "description": "Professional web development, mobile app development, automation, and consulting services for modern businesses.",
+    "url": "https://theonetwork1.com/services",
+    "provider": {
+      "@type": "Organization",
+      "name": "Theonetwork",
+      "url": "https://theonetwork1.com"
+    },
+    "serviceType": ["Web Development", "Mobile App Development", "Business Automation", "Technology Consulting"],
+    "areaServed": "Worldwide",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Digital Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Mobile App Development",
+            "description": "Native iOS & Android development, cross-platform solutions, and progressive web apps."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Web Development",
+            "description": "Responsive web design, e-commerce solutions, and content management systems."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Business Automation",
+            "description": "Workflow automation, API integration, and custom software solutions."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Technology Consulting",
+            "description": "Technology strategy, digital transformation, and technical audits."
+          }
+        }
+      ]
+    }
+  };
+
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Our Services | Theo Network - Web Development & Digital Solutions"
+        description="Discover Theo Network's comprehensive digital services: web development, mobile apps, business automation, and technology consulting. Transform your business with our expert solutions."
+        keywords="web development services, mobile app development, business automation, technology consulting, digital transformation, e-commerce solutions, custom software development"
+        canonical="/services"
+        ogTitle="Our Services | Theo Network - Digital Solutions"
+        ogDescription="Professional web development, mobile apps, automation, and consulting services for modern businesses."
+        ogUrl="/services"
+        structuredData={servicesStructuredData}
+      />
       {/* Hero Section */}
       <header className="bg-gradient-to-br from-slate-50 to-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

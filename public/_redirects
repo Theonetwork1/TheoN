@@ -1,0 +1,8 @@
+# Redirect old .html URLs to new React routes
+/about.html /about 301
+/contact.html /contact 301
+/services.html /services 301
+/faq.html /faq 301
+
+# Handle SPA routing - all other routes go to index.html
+/* /index.html 200
