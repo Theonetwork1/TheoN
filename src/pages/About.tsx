@@ -1,10 +1,18 @@
 import React, { useEffect } from 'react';
 import { CheckCircle, Users, Award, Globe, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
-import SEO from '../components/SEO';
+import { useSEO } from '../hooks/useSEO';
 
 const About = () => {
   const { t } = useLanguage();
+
+  // SEO meta tags
+  useSEO({
+    title: "About Us | Theo Network - Digital Transformation Experts",
+    description: "Learn about Theo Network's mission to help businesses evolve through modern technology solutions. Meet our team and discover our values of quality, innovation, and client success.",
+    keywords: "about theonetwork, digital transformation team, technology experts, business solutions, web development company, mobile app developers",
+    canonical: "/about"
+  });
 
   useEffect(() => {
     const observerOptions = {
@@ -56,42 +64,9 @@ const About = () => {
     },
   ];
 
-  const aboutStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    "name": "About Theo Network",
-    "description": "Learn about Theo Network's mission, values, and the team behind our digital transformation services.",
-    "url": "https://theonetwork1.com/about",
-    "mainEntity": {
-      "@type": "Organization",
-      "name": "Theonetwork",
-      "url": "https://theonetwork1.com",
-      "logo": "https://theonetwork1.com/TheoNetwork%20Logo%20(1).png",
-      "description": "Professional tech solutions for modern businesses",
-      "founder": {
-        "@type": "Person",
-        "name": "Theshneider Avril"
-      },
-      "address": {
-        "@type": "PostalAddress",
-        "addressRegion": "Pennsylvania",
-        "addressCountry": "US"
-      }
-    }
-  };
 
   return (
     <div className="min-h-screen">
-      <SEO
-        title="About Us | Theo Network - Digital Transformation Experts"
-        description="Learn about Theo Network's mission to help businesses evolve through modern technology solutions. Meet our team and discover our values of quality, innovation, and client success."
-        keywords="about theonetwork, digital transformation team, technology experts, business solutions, web development company, mobile app developers"
-        canonical="/about"
-        ogTitle="About Theo Network - Digital Transformation Experts"
-        ogDescription="Learn about Theo Network's mission to help businesses evolve through modern technology solutions."
-        ogUrl="/about"
-        structuredData={aboutStructuredData}
-      />
       {/* Hero Section */}
       <header className="bg-gradient-to-br from-slate-50 to-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

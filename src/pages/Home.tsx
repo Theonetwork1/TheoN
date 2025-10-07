@@ -3,10 +3,18 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Smartphone, Globe, Cog, TrendingUp, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import EmailPopup from '../components/EmailPopup';
-import SEO from '../components/SEO';
+import { useSEO } from '../hooks/useSEO';
 
 const Home = () => {
   const { t } = useLanguage();
+
+  // SEO meta tags
+  useSEO({
+    title: "Theo Network | Digitalize Your Business - Web Development & Mobile Apps",
+    description: "Transform your business with Theo Network's cutting-edge digital solutions. Professional web development, mobile apps, business automation, and technology consulting services.",
+    keywords: "digital transformation, web development, mobile app development, business automation, technology consulting, digital solutions, web design, e-commerce development",
+    canonical: "/"
+  });
   const heroRef = useRef<HTMLElement>(null);
   const servicesRef = useRef<HTMLElement>(null);
   const testimonialsRef = useRef<HTMLElement>(null);
@@ -358,37 +366,9 @@ const Home = () => {
     { number: '24/7', label: 'Support Available' },
   ];
 
-  const homeStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Theo Network",
-    "url": "https://theonetwork1.com",
-    "description": "Professional digital transformation services including web development, mobile apps, business automation, and technology consulting.",
-    "publisher": {
-      "@type": "Organization",
-      "name": "Theonetwork",
-      "url": "https://theonetwork1.com",
-      "logo": "https://theonetwork1.com/TheoNetwork%20Logo%20(1).png"
-    },
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://theonetwork1.com/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  };
 
   return (
     <div className="min-h-screen">
-      <SEO
-        title="Theo Network | Digitalize Your Business - Web Development & Mobile Apps"
-        description="Transform your business with Theo Network's cutting-edge digital solutions. Professional web development, mobile apps, business automation, and technology consulting services."
-        keywords="digital transformation, web development, mobile app development, business automation, technology consulting, digital solutions, web design, e-commerce development"
-        canonical="/"
-        ogTitle="Theo Network | Digitalize Your Business"
-        ogDescription="Transform your business with cutting-edge digital solutions. Professional web development, mobile apps, and technology consulting."
-        ogUrl="/"
-        structuredData={homeStructuredData}
-      />
       {/* Main Hero Banner - Technology/Digital Focused */}
       <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden" style={{ marginBottom: 0 }}>
         {/* Background Video - Full Screen */}
