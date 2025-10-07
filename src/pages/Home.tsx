@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, Smartphone, Globe, Cog, TrendingUp, Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Star, Smartphone, Globe, Cog, TrendingUp, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import EmailPopup from '../components/EmailPopup';
 import SEO from '../components/SEO';
@@ -13,12 +13,10 @@ const Home = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   
   // État pour les animations interactives
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
   const [showEmailPopup, setShowEmailPopup] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
   // Detect mobile device and set initial video state
@@ -191,7 +189,7 @@ const Home = () => {
   };
 
   // Handle scroll to enable sound on mobile
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const video = videoRef.current;
     if (video && isMobile && video.muted) {
       console.log('Scroll detected on mobile - enabling sound');
@@ -203,7 +201,7 @@ const Home = () => {
         console.error('Failed to play with sound after scroll:', err);
       });
     }
-  };
+  }, [isMobile]);
 
   // Handle scroll to play/pause video based on hero section visibility
   useEffect(() => {
@@ -232,13 +230,13 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScrollVideo);
   }, [isVideoMuted]);
 
-  // Add scroll listener for mobile sound activation
-  useEffect(() => {
-    if (isMobile) {
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
-    }
-  }, [isMobile]);
+        // Add scroll listener for mobile sound activation
+        useEffect(() => {
+          if (isMobile) {
+            window.addEventListener('scroll', handleScroll);
+            return () => window.removeEventListener('scroll', handleScroll);
+          }
+        }, [isMobile, handleScroll]);
 
   useEffect(() => {
     const observerOptions = {
@@ -411,19 +409,16 @@ const Home = () => {
               minHeight: '100vh',
               zIndex: 2
             }}
-            onError={(e) => {
-              console.log('Video failed to load:', e);
-              setVideoError(true);
-              setVideoLoaded(false);
-            }}
-            onLoadedData={(e) => {
-              console.log('Video loaded successfully');
-              setVideoLoaded(true);
-              setVideoError(false);
-            }}
-            onCanPlay={(e) => {
+                  onError={() => {
+                    console.log('Video failed to load');
+                    setVideoError(true);
+                  }}
+                  onLoadedData={() => {
+                    console.log('Video loaded successfully');
+                    setVideoError(false);
+                  }}
+            onCanPlay={() => {
               console.log('Video can play');
-              setVideoLoaded(true);
               setVideoError(false);
             }}
             onLoadStart={() => {

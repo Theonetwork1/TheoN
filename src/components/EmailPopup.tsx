@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X, Mail, Gift } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
@@ -44,16 +44,20 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
         setIsSuccess(false);
         setEmail('');
       }, 3000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error saving email:', error);
       
       // Messages d'erreur spécifiques
-      if (error.message && error.message.includes('Failed to fetch')) {
-        setError('Problème de connexion. Vérifiez votre configuration Supabase.');
-      } else if (error.message && error.message.includes('duplicate key')) {
-        setError('Cette adresse email est déjà enregistrée.');
-      } else if (error.message && error.message.includes('relation "Theo_email" does not exist')) {
-        setError('Table non trouvée. Créez la table Theo_email dans Supabase.');
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch')) {
+          setError('Problème de connexion. Vérifiez votre configuration Supabase.');
+        } else if (error.message.includes('duplicate key')) {
+          setError('Cette adresse email est déjà enregistrée.');
+        } else if (error.message.includes('relation "Theo_email" does not exist')) {
+          setError('Table non trouvée. Créez la table Theo_email dans Supabase.');
+        } else {
+          setError('Une erreur est survenue. Veuillez réessayer.');
+        }
       } else {
         setError('Une erreur est survenue. Veuillez réessayer.');
       }

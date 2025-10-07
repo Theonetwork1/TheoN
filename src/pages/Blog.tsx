@@ -9,7 +9,7 @@ const Blog = () => {
   React.useEffect(() => {
     const savedPosts = localStorage.getItem('theo-network-blog-posts');
     if (savedPosts) {
-      const posts = JSON.parse(savedPosts).filter((post: any) => post.published);
+      const posts = JSON.parse(savedPosts).filter((post: { published: boolean }) => post.published);
       setBlogPosts(posts);
     } else {
       // Default posts if none exist
@@ -101,10 +101,9 @@ const Blog = () => {
 
   const filteredPosts = selectedCategory === 'All' 
     ? blogPosts 
-    : blogPosts.filter((post: any) => post.category === selectedCategory);
+    : blogPosts.filter((post: { category: string }) => post.category === selectedCategory);
 
-  const featuredPost = blogPosts.find((post: any) => post.featured);
-  const regularPosts = blogPosts.filter((post: any) => !post.featured);
+  const featuredPost = blogPosts.find((post: { featured: boolean }) => post.featured);
 
   return (
     <div className="min-h-screen">
