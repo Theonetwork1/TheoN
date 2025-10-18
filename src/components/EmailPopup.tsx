@@ -21,6 +21,14 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
     setError('');
 
     try {
+      // Vérifier si Supabase est configuré
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('votre-projet-id') || supabaseKey.includes('demo-key')) {
+        throw new Error('SUPABASE_NOT_CONFIGURED');
+      }
+
       console.log('Saving email to Supabase:', email);
       
       const { error } = await supabase
@@ -49,12 +57,28 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
       
       // Messages d'erreur spécifiques
       if (error instanceof Error) {
-        if (error.message.includes('Failed to fetch')) {
+        if (error.message === 'SUPABASE_NOT_CONFIGURED') {
+          // Rediriger vers WhatsApp comme fallback
+          const message = `Bonjour ! Je souhaite obtenir une réduction sur vos services.\n\nMon email: ${email}`;
+          const whatsappUrl = `https://wa.me/+17745069615?text=${encodeURIComponent(message)}`;
+          window.open(whatsappUrl, '_blank');
+          
+          // Afficher un message de succès
+          setIsSuccess(true);
+          setTimeout(() => {
+            onClose();
+            setIsSuccess(false);
+            setEmail('');
+          }, 3000);
+          return;
+        } else if (error.message.includes('Failed to fetch')) {
           setError('Problème de connexion. Vérifiez votre configuration Supabase.');
         } else if (error.message.includes('duplicate key')) {
           setError('Cette adresse email est déjà enregistrée.');
         } else if (error.message.includes('relation "Theo_email" does not exist')) {
           setError('Table non trouvée. Créez la table Theo_email dans Supabase.');
+        } else if (error.message.includes('Invalid API key')) {
+          setError('Clé API Supabase invalide. Vérifiez la configuration.');
         } else {
           setError('Une erreur est survenue. Veuillez réessayer.');
         }

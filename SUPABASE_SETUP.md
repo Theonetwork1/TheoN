@@ -1,112 +1,72 @@
 # Configuration Supabase pour le Popup Email
 
-## 🚀 Configuration Rapide
+## 🚨 Problème Actuel
+Le popup email affiche "Une erreur est survenue. Veuillez réessayer." car Supabase n'est pas configuré.
+
+## ✅ Solution Rapide (Fallback WhatsApp)
+Le popup redirige maintenant automatiquement vers WhatsApp si Supabase n'est pas configuré.
+
+## 🔧 Configuration Complète Supabase
 
 ### 1. Créer un projet Supabase
-1. Allez sur [supabase.com](https://supabase.com)
-2. Cliquez sur "New Project"
-3. Choisissez votre organisation
-4. Nom du projet : `theonetwork` (ou votre choix)
-5. Mot de passe : Créez un mot de passe fort
-6. Région : Choisissez la plus proche
-7. Cliquez sur "Create new project"
+1. Allez sur [https://supabase.com](https://supabase.com)
+2. Créez un compte ou connectez-vous
+3. Cliquez sur "New Project"
+4. Choisissez votre organisation
+5. Nommez votre projet (ex: "theonetwork")
+6. Créez un mot de passe fort
+7. Choisissez une région proche
+8. Cliquez sur "Create new project"
 
-### 2. Récupérer les clés
+### 2. Récupérer les clés API
 1. Dans votre projet Supabase, allez dans **Settings** > **API**
 2. Copiez :
    - **Project URL** (ex: `https://abcdefgh.supabase.co`)
-   - **anon public** key (commence par `eyJ...`)
+   - **anon public** key (commence par `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`)
 
 ### 3. Créer la table Theo_email
-Dans l'éditeur SQL de Supabase, exécutez :
+1. Allez dans **Table Editor**
+2. Cliquez sur **New Table**
+3. Nom de la table : `Theo_email`
+4. Ajoutez ces colonnes :
+   - `id` (int8, Primary Key, Auto-increment)
+   - `email` (text, Not null)
+   - `source` (text, Default: 'homepage-form')
+   - `created_at` (timestamptz, Default: now())
+5. Cliquez sur **Save**
 
-```sql
--- Créer la table
-CREATE TABLE Theo_email (
-  id SERIAL PRIMARY KEY,
-  email VARCHAR(255) NOT NULL UNIQUE,
-  source VARCHAR(100) NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Créer les index pour de meilleures performances
-CREATE INDEX idx_theo_email_email ON Theo_email(email);
-CREATE INDEX idx_theo_email_source ON Theo_email(source);
-CREATE INDEX idx_theo_email_created_at ON Theo_email(created_at);
-```
-
-### 4. Configurer les politiques RLS
-```sql
--- Activer RLS
-ALTER TABLE Theo_email ENABLE ROW LEVEL SECURITY;
-
--- Politique pour permettre l'insertion d'emails
-CREATE POLICY "Allow email insertions" ON Theo_email
-  FOR INSERT WITH CHECK (true);
-
--- Politique pour permettre la lecture (pour l'admin)
-CREATE POLICY "Allow admin read access" ON Theo_email
-  FOR SELECT USING (true);
-```
-
-### 5. Configurer les variables d'environnement
+### 4. Configurer les variables d'environnement
 Créez un fichier `.env` à la racine du projet :
 
 ```env
 VITE_SUPABASE_URL=https://votre-projet-id.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.votre-vraie-cle-ici
 ```
 
-### 6. Redémarrer le serveur
-```bash
-npm run dev
-```
+### 5. Configurer les politiques RLS (Row Level Security)
+1. Allez dans **Authentication** > **Policies**
+2. Pour la table `Theo_email`, créez une politique :
+   - **Policy Name**: `Allow public inserts`
+   - **Target Roles**: `public`
+   - **USING expression**: `true`
+   - **WITH CHECK expression**: `true`
 
-## ✅ Test de fonctionnement
+### 6. Tester la configuration
+1. Redémarrez le serveur de développement : `npm run dev`
+2. Testez le popup email
+3. Vérifiez dans Supabase que l'email est bien enregistré
 
-1. Ouvrez votre site sur `http://localhost:5173`
-2. Attendez 10 secondes
-3. Le popup apparaît
-4. Entrez un email de test
-5. Cliquez sur "Obtenir ma réduction"
-6. Vérifiez dans Supabase > Table Editor > Theo_email
+## 🎯 Résultat Attendu
+- ✅ Popup email fonctionne sans erreur
+- ✅ Emails sauvegardés dans Supabase
+- ✅ Messages de succès appropriés
+- ✅ Fallback WhatsApp si problème
 
-## 🔧 Dépannage
+## 🔍 Dépannage
+- **Erreur "Invalid API key"** : Vérifiez la clé anon
+- **Erreur "relation does not exist"** : Créez la table Theo_email
+- **Erreur "Failed to fetch"** : Vérifiez l'URL du projet
+- **Erreur de permissions** : Configurez les politiques RLS
 
-### Erreur "relation Theo_email does not exist"
-- Vérifiez que la table a été créée dans Supabase
-- Exécutez le script SQL de création de table
-
-### Erreur "Failed to fetch"
-- Vérifiez votre URL Supabase dans `.env`
-- Vérifiez votre clé anonyme
-- Redémarrez le serveur après modification du `.env`
-
-### Erreur "duplicate key"
-- L'email existe déjà (c'est normal)
-- Le popup affichera un message approprié
-
-## 📊 Structure de la table
-
-| Colonne | Type | Description |
-|---------|------|-------------|
-| id | SERIAL | Clé primaire auto-incrémentée |
-| email | VARCHAR(255) | Adresse email (unique) |
-| source | VARCHAR(100) | Source ("homepage-form") |
-| created_at | TIMESTAMP | Date de création automatique |
-
-## 🎯 Fonctionnalités
-
-- ✅ **Popup automatique** : Apparaît après 10 secondes
-- ✅ **Validation email** : Format vérifié côté client
-- ✅ **Sauvegarde réelle** : Emails stockés dans Supabase
-- ✅ **Message de succès** : "Merci ! Vous recevrez votre réduction par email."
-- ✅ **Gestion d'erreurs** : Messages clairs pour l'utilisateur
-- ✅ **Design responsive** : Fonctionne sur mobile et desktop
-- ✅ **Animation** : Effet d'apparition fluide
-
-## 📈 Analytics
-
-Vous pouvez voir les emails collectés dans :
-- **Supabase Dashboard** > Table Editor > Theo_email
-- **Supabase Dashboard** > Analytics pour les statistiques
+## 📞 Support
+Si vous avez des questions, contactez-nous via WhatsApp : +1 (774) 506-9615
