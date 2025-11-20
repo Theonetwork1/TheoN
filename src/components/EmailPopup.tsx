@@ -25,27 +25,57 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       
-      if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('votre-projet-id') || supabaseKey.includes('demo-key')) {
+      console.log('Supabase configuration check:', {
+        hasUrl: !!supabaseUrl,
+        hasKey: !!supabaseKey,
+        url: supabaseUrl ? `${supabaseUrl.substring(0, 20)}...` : 'missing',
+        keyLength: supabaseKey ? supabaseKey.length : 0
+      });
+      
+      // Vérifier si les variables d'environnement sont définies et valides
+      if (!supabaseUrl || !supabaseKey || 
+          supabaseUrl.includes('votre-projet-id') || 
+          supabaseUrl.includes('placeholder') ||
+          supabaseKey.includes('demo-key') ||
+          supabaseKey.includes('placeholder') ||
+          supabaseKey.length < 100) {
+        console.warn('Supabase not properly configured, using WhatsApp fallback');
         throw new Error('SUPABASE_NOT_CONFIGURED');
       }
 
-      console.log('Saving email to Supabase:', email);
+      console.log('Attempting to save email to Supabase:', email);
       
-      const { error } = await supabase
+      const { data, error: supabaseError } = await supabase
         .from('Theo_email')
         .insert([
           { 
             email: email,
             source: 'homepage-form'
           }
-        ]);
+        ])
+        .select();
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+      if (supabaseError) {
+        console.error('Supabase error details:', {
+          message: supabaseError.message,
+          details: supabaseError.details,
+          hint: supabaseError.hint,
+          code: supabaseError.code
+        });
+        
+        // Vérifier si c'est une erreur de clé API invalide
+        if (supabaseError.message?.includes('Invalid API key') || 
+            supabaseError.message?.includes('JWT') ||
+            supabaseError.code === 'PGRST301' ||
+            supabaseError.code === '42501') {
+          console.warn('Invalid API key detected, using WhatsApp fallback');
+          throw new Error('SUPABASE_NOT_CONFIGURED');
+        }
+        
+        throw supabaseError;
       }
 
-      console.log('Email saved successfully!');
+      console.log('Email saved successfully!', data);
       setIsSuccess(true);
       setTimeout(() => {
         onClose();
@@ -55,9 +85,11 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
     } catch (error: unknown) {
       console.error('Error saving email:', error);
       
-      // Messages d'erreur spécifiques
-      if (error instanceof Error) {
-        if (error.message === 'SUPABASE_NOT_CONFIGURED') {
+      // Gérer les erreurs Supabase (qui sont des objets, pas toujours des Error)
+      if (error && typeof error === 'object' && 'message' in error) {
+        const errorMessage = String(error.message || '');
+        
+        if (errorMessage === 'SUPABASE_NOT_CONFIGURED') {
           // Rediriger vers WhatsApp comme fallback
           const message = `Bonjour ! Je souhaite obtenir une réduction sur vos services.\n\nMon email: ${email}`;
           const whatsappUrl = `https://wa.me/+17745069615?text=${encodeURIComponent(message)}`;
@@ -71,17 +103,48 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
             setEmail('');
           }, 3000);
           return;
-        } else if (error.message.includes('Failed to fetch')) {
-          setError('Problème de connexion. Vérifiez votre configuration Supabase.');
-        } else if (error.message.includes('duplicate key')) {
+        } else if (errorMessage.includes('Failed to fetch') || 
+                   errorMessage.includes('NetworkError') ||
+                   errorMessage.includes('fetch')) {
+          setError('Problème de connexion. Vérifiez votre connexion internet et votre configuration Supabase.');
+        } else if (errorMessage.includes('duplicate key') || 
+                   errorMessage.includes('unique constraint')) {
           setError('Cette adresse email est déjà enregistrée.');
-        } else if (error.message.includes('relation "Theo_email" does not exist')) {
+        } else if (errorMessage.includes('relation') && errorMessage.includes('does not exist')) {
           setError('Table non trouvée. Créez la table Theo_email dans Supabase.');
-        } else if (error.message.includes('Invalid API key')) {
-          setError('Clé API Supabase invalide. Vérifiez la configuration.');
+        } else if (errorMessage.includes('Invalid API key') || 
+                   errorMessage.includes('JWT') ||
+                   (error && typeof error === 'object' && 'code' in error && 
+                    (error.code === 'PGRST301' || error.code === '42501'))) {
+          setError('Clé API Supabase invalide. Redirection vers WhatsApp...');
+          // Fallback vers WhatsApp
+          const message = `Bonjour ! Je souhaite obtenir une réduction sur vos services.\n\nMon email: ${email}`;
+          const whatsappUrl = `https://wa.me/+17745069615?text=${encodeURIComponent(message)}`;
+          window.open(whatsappUrl, '_blank');
+          setIsSuccess(true);
+          setTimeout(() => {
+            onClose();
+            setIsSuccess(false);
+            setEmail('');
+          }, 3000);
+          return;
         } else {
-          setError('Une erreur est survenue. Veuillez réessayer.');
+          setError(`Erreur: ${errorMessage || 'Une erreur est survenue. Veuillez réessayer.'}`);
         }
+      } else if (error instanceof Error) {
+        if (error.message === 'SUPABASE_NOT_CONFIGURED') {
+          const message = `Bonjour ! Je souhaite obtenir une réduction sur vos services.\n\nMon email: ${email}`;
+          const whatsappUrl = `https://wa.me/+17745069615?text=${encodeURIComponent(message)}`;
+          window.open(whatsappUrl, '_blank');
+          setIsSuccess(true);
+          setTimeout(() => {
+            onClose();
+            setIsSuccess(false);
+            setEmail('');
+          }, 3000);
+          return;
+        }
+        setError(`Erreur: ${error.message || 'Une erreur est survenue. Veuillez réessayer.'}`);
       } else {
         setError('Une erreur est survenue. Veuillez réessayer.');
       }
