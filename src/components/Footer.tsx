@@ -14,7 +14,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <img 
-                src="/TheoNetwork Logo (1).png" 
+                src="/theonetwork-logo.png" 
                 alt="Theonetwork Logo" 
                 className="w-14 h-14 object-contain"
               />

@@ -118,7 +118,7 @@ const About = () => {
               <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl p-8 h-96 flex items-center justify-center hover-lift">
                 <div className="text-center">
                   <img 
-                    src="/TheoNetwork Logo (1).png"
+                    src="/theonetwork-logo.png"
                     alt="Theonetwork Logo" 
                     className="w-32 h-32 object-contain mx-auto mb-4 animate-scale-in"
                     loading="lazy"

@@ -417,7 +417,7 @@ const Login = () => {
         <div className="text-center">
           <Link to="/" className="inline-flex items-center space-x-2 mb-6">
             <img 
-              src="/TheoNetwork Logo (1).png" 
+              src="/theonetwork-logo.png" 
               alt="Theonetwork Logo" 
               className="w-20 h-20 object-contain"
             />
