@@ -26,6 +26,7 @@ const Home = () => {
   const [showEmailPopup, setShowEmailPopup] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   // Detect mobile device and set initial video state
   useEffect(() => {
@@ -266,18 +267,6 @@ const Home = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Gestion du mouvement de la souris pour les effets parallax
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
-      });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   // Afficher le popup email après 10 secondes
   useEffect(() => {
