@@ -25,7 +25,7 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
       
       // Tenter d'insérer l'email dans Supabase
       const { data, error: supabaseError } = await supabase
-        .from('Theo_email')
+        .from('theo_email')
         .insert([
           { 
             email: email,
@@ -41,6 +41,14 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
           hint: supabaseError.hint,
           code: supabaseError.code
         });
+        
+        // Vérifier si c'est une erreur de table non trouvée ou de schéma
+        if (supabaseError.message?.includes('Could not find the table') ||
+            supabaseError.message?.includes('relation') && supabaseError.message?.includes('does not exist') ||
+            supabaseError.message?.includes('schema cache')) {
+          console.error('Table not found error - check table name and RLS policies');
+          throw new Error('TABLE_NOT_FOUND');
+        }
         
         // Vérifier si c'est une erreur de configuration (clé API invalide, URL invalide, etc.)
         if (supabaseError.message?.includes('Invalid API key') || 
@@ -70,7 +78,7 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
       if (error && typeof error === 'object' && 'message' in error) {
         const errorMessage = String(error.message || '');
         
-        if (errorMessage === 'SUPABASE_NOT_CONFIGURED') {
+        if (errorMessage === 'SUPABASE_NOT_CONFIGURED' || errorMessage === 'TABLE_NOT_FOUND') {
           // Rediriger vers WhatsApp comme fallback
           const message = `Bonjour ! Je souhaite obtenir une réduction sur vos services.\n\nMon email: ${email}`;
           const whatsappUrl = `https://wa.me/+17745069615?text=${encodeURIComponent(message)}`;
@@ -91,8 +99,10 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
         } else if (errorMessage.includes('duplicate key') || 
                    errorMessage.includes('unique constraint')) {
           setError('Cette adresse email est déjà enregistrée.');
-        } else if (errorMessage.includes('relation') && errorMessage.includes('does not exist')) {
-          setError('Table non trouvée. Créez la table Theo_email dans Supabase.');
+        } else if (errorMessage.includes('Could not find the table') ||
+                   errorMessage.includes('schema cache') ||
+                   (errorMessage.includes('relation') && errorMessage.includes('does not exist'))) {
+          setError('Table non trouvée ou problème de politique RLS. Vérifiez la table theo_email dans Supabase.');
         } else if (errorMessage.includes('Invalid API key') || 
                    errorMessage.includes('JWT') ||
                    (error && typeof error === 'object' && 'code' in error && 
@@ -113,7 +123,7 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
           setError(`Erreur: ${errorMessage || 'Une erreur est survenue. Veuillez réessayer.'}`);
         }
       } else if (error instanceof Error) {
-        if (error.message === 'SUPABASE_NOT_CONFIGURED') {
+        if (error.message === 'SUPABASE_NOT_CONFIGURED' || error.message === 'TABLE_NOT_FOUND') {
           const message = `Bonjour ! Je souhaite obtenir une réduction sur vos services.\n\nMon email: ${email}`;
           const whatsappUrl = `https://wa.me/+17745069615?text=${encodeURIComponent(message)}`;
           window.open(whatsappUrl, '_blank');
