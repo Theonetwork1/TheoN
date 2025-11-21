@@ -43,13 +43,27 @@ VITE_SUPABASE_URL=https://votre-projet-id.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.votre-vraie-cle-ici
 ```
 
-### 5. Configurer les politiques RLS (Row Level Security)
-1. Allez dans **Authentication** > **Policies**
-2. Pour la table `Theo_email`, créez une politique :
+### 5. Configurer les politiques RLS (Row Level Security) - ⚠️ IMPORTANT
+**C'est cette étape qui résout l'erreur "Problème de politique de sécurité (RLS)"**
+
+1. Dans Supabase, allez dans **Table Editor**
+2. Cliquez sur la table `theo_email` (ou `Theo_email`)
+3. Cliquez sur l'onglet **Policies** (en haut à droite)
+4. Cliquez sur **New Policy** ou **Enable RLS** si RLS n'est pas encore activé
+5. Créez une politique pour permettre l'insertion :
    - **Policy Name**: `Allow public inserts`
-   - **Target Roles**: `public`
-   - **USING expression**: `true`
-   - **WITH CHECK expression**: `true`
+   - **Allowed Operation**: Sélectionnez **INSERT**
+   - **Target Roles**: Sélectionnez `public` (ou laissez vide pour tous)
+   - **USING expression**: Laissez vide ou mettez `true`
+   - **WITH CHECK expression**: Mettez `true` (cela permet à n'importe qui d'insérer)
+6. Cliquez sur **Review** puis **Save Policy**
+
+**Alternative : Désactiver RLS (pour le développement uniquement)**
+- Si vous voulez désactiver RLS temporairement pour tester :
+  1. Allez dans **Table Editor** > `theo_email`
+  2. Cliquez sur l'icône de verrouillage à côté du nom de la table
+  3. Désactivez **Enable Row Level Security**
+  4. ⚠️ **Attention** : Ne faites cela que pour le développement, pas en production !
 
 ### 6. Tester la configuration
 1. Redémarrez le serveur de développement : `npm run dev`
