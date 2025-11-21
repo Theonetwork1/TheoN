@@ -42,19 +42,7 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
           code: supabaseError.code
         });
         
-        // Vérifier si c'est une erreur de configuration critique (clé API invalide, URL invalide, etc.)
-        // Ces erreurs nécessitent un fallback car Supabase ne peut pas fonctionner
-        if (supabaseError.message?.includes('Invalid API key') || 
-            supabaseError.message?.includes('JWT') ||
-            supabaseError.message?.includes('Failed to fetch') ||
-            supabaseError.code === 'PGRST301' ||
-            supabaseError.code === '42501') {
-          console.warn('Supabase configuration error detected, using WhatsApp fallback');
-          throw new Error('SUPABASE_NOT_CONFIGURED');
-        }
-        
-        // Pour les autres erreurs (RLS, table, etc.), les lancer normalement pour affichage
-        // Ne pas utiliser de fallback automatique - afficher l'erreur à l'utilisateur
+        // Lancer l'erreur pour affichage à l'utilisateur
         throw supabaseError;
       }
 
@@ -72,23 +60,9 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
       if (error && typeof error === 'object' && 'message' in error) {
         const errorMessage = String(error.message || '');
         
-        if (errorMessage === 'SUPABASE_NOT_CONFIGURED') {
-          // Rediriger vers WhatsApp comme fallback uniquement pour les erreurs de configuration critique
-          const message = `Bonjour ! Je souhaite obtenir une réduction sur vos services.\n\nMon email: ${email}`;
-          const whatsappUrl = `https://wa.me/+17745069615?text=${encodeURIComponent(message)}`;
-          window.open(whatsappUrl, '_blank');
-          
-          // Afficher un message de succès
-          setIsSuccess(true);
-          setTimeout(() => {
-            onClose();
-            setIsSuccess(false);
-            setEmail('');
-          }, 3000);
-          return;
-        } else if (errorMessage.includes('Failed to fetch') || 
-                   errorMessage.includes('NetworkError') ||
-                   errorMessage.includes('fetch')) {
+        if (errorMessage.includes('Failed to fetch') || 
+            errorMessage.includes('NetworkError') ||
+            errorMessage.includes('fetch')) {
           setError('Problème de connexion. Vérifiez votre connexion internet et votre configuration Supabase.');
         } else if (errorMessage.includes('duplicate key') || 
                    errorMessage.includes('unique constraint')) {
@@ -106,35 +80,11 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
                    errorMessage.includes('JWT') ||
                    (error && typeof error === 'object' && 'code' in error && 
                     (error.code === 'PGRST301' || error.code === '42501'))) {
-          setError('Clé API Supabase invalide. Redirection vers WhatsApp...');
-          // Fallback vers WhatsApp
-          const message = `Bonjour ! Je souhaite obtenir une réduction sur vos services.\n\nMon email: ${email}`;
-          const whatsappUrl = `https://wa.me/+17745069615?text=${encodeURIComponent(message)}`;
-          window.open(whatsappUrl, '_blank');
-          setIsSuccess(true);
-          setTimeout(() => {
-            onClose();
-            setIsSuccess(false);
-            setEmail('');
-          }, 3000);
-          return;
+          setError('Clé API Supabase invalide. Vérifiez votre configuration Supabase.');
         } else {
           setError(`Erreur: ${errorMessage || 'Une erreur est survenue. Veuillez réessayer.'}`);
         }
       } else if (error instanceof Error) {
-        if (error.message === 'SUPABASE_NOT_CONFIGURED') {
-          // Fallback WhatsApp uniquement pour les erreurs de configuration critique
-          const message = `Bonjour ! Je souhaite obtenir une réduction sur vos services.\n\nMon email: ${email}`;
-          const whatsappUrl = `https://wa.me/+17745069615?text=${encodeURIComponent(message)}`;
-          window.open(whatsappUrl, '_blank');
-          setIsSuccess(true);
-          setTimeout(() => {
-            onClose();
-            setIsSuccess(false);
-            setEmail('');
-          }, 3000);
-          return;
-        }
         setError(`Erreur: ${error.message || 'Une erreur est survenue. Veuillez réessayer.'}`);
       } else {
         setError('Une erreur est survenue. Veuillez réessayer.');
