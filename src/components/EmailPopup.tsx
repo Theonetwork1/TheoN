@@ -21,30 +21,9 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
     setError('');
 
     try {
-      // Vérifier si Supabase est configuré
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-      
-      console.log('Supabase configuration check:', {
-        hasUrl: !!supabaseUrl,
-        hasKey: !!supabaseKey,
-        url: supabaseUrl ? `${supabaseUrl.substring(0, 20)}...` : 'missing',
-        keyLength: supabaseKey ? supabaseKey.length : 0
-      });
-      
-      // Vérifier si les variables d'environnement sont définies et valides
-      if (!supabaseUrl || !supabaseKey || 
-          supabaseUrl.includes('votre-projet-id') || 
-          supabaseUrl.includes('placeholder') ||
-          supabaseKey.includes('demo-key') ||
-          supabaseKey.includes('placeholder') ||
-          supabaseKey.length < 100) {
-        console.warn('Supabase not properly configured, using WhatsApp fallback');
-        throw new Error('SUPABASE_NOT_CONFIGURED');
-      }
-
       console.log('Attempting to save email to Supabase:', email);
       
+      // Tenter d'insérer l'email dans Supabase
       const { data, error: supabaseError } = await supabase
         .from('Theo_email')
         .insert([
@@ -63,15 +42,17 @@ const EmailPopup: React.FC<EmailPopupProps> = ({ isOpen, onClose }) => {
           code: supabaseError.code
         });
         
-        // Vérifier si c'est une erreur de clé API invalide
+        // Vérifier si c'est une erreur de configuration (clé API invalide, URL invalide, etc.)
         if (supabaseError.message?.includes('Invalid API key') || 
             supabaseError.message?.includes('JWT') ||
+            supabaseError.message?.includes('Failed to fetch') ||
             supabaseError.code === 'PGRST301' ||
             supabaseError.code === '42501') {
-          console.warn('Invalid API key detected, using WhatsApp fallback');
+          console.warn('Supabase configuration error detected, using WhatsApp fallback');
           throw new Error('SUPABASE_NOT_CONFIGURED');
         }
         
+        // Pour les autres erreurs, les lancer normalement pour affichage
         throw supabaseError;
       }
 

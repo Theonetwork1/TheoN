@@ -4,11 +4,6 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || ''
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
 
-// Créer le client Supabase seulement si les variables sont définies
-// Sinon, créer un client vide qui générera des erreurs claires
-export const supabase = (supabaseUrl && supabaseKey && 
-                         !supabaseUrl.includes('votre-projet-id') && 
-                         !supabaseKey.includes('demo-key') &&
-                         supabaseKey.length > 100)
-  ? createClient(supabaseUrl, supabaseKey)
-  : createClient('https://placeholder.supabase.co', 'placeholder-key')
+// Créer le client Supabase avec les variables d'environnement
+// Si les variables ne sont pas définies, le client sera créé mais générera des erreurs lors de l'utilisation
+export const supabase = createClient(supabaseUrl, supabaseKey)
