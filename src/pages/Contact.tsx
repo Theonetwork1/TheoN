@@ -223,7 +223,7 @@ const Contact = () => {
                     WhatsApp Chat
                   </a>
                   <a
-                    href="https://wa.me/+17745069615?text=Hi! I'd like to schedule a consultation."
+                    href="https://accelerator.theonetwork1.com/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full text-center px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors duration-300 hover-lift"

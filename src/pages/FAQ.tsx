@@ -241,7 +241,7 @@ const FAQ = () => {
             Book your free consultation today and let's discuss your project
           </p>
           <a
-            href="https://wa.me/+17745069615?text=Hi! I'd like to book a free consultation with Theonetwork."
+            href="https://accelerator.theonetwork1.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 btn-animate"

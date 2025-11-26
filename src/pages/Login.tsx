@@ -285,9 +285,14 @@ const Login = () => {
                   <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
                     Request New Project
                   </button>
-                  <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
+                  <a
+                    href="https://accelerator.theonetwork1.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
                     Schedule Consultation
-                  </button>
+                  </a>
                   <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
                     Contact Support
                   </button>
